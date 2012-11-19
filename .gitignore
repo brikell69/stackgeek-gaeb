@@ -33,3 +33,5 @@ pip-log.txt
 .pydevproject
 .project
 .settings*
+
+config.py
