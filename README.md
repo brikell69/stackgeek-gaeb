@@ -7,3 +7,4 @@ StackGeek provides a community contributed blog for discussing infrastructure ar
 The site is built using the GAEB project hosted on Github: http://github.com/gae-boilerplate.  Any modifications made to the StackGeek site which are core to the project should be submitted to GAEB directly for pull requests.
 
 ##More to come...
+I'll add more here as we go on.  Instructions, etc.
