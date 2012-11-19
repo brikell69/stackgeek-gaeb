@@ -1,7 +1,1 @@
 blacklist:
-- subnet: 173.247.200.122
-  description: Loggly
-- subnet: 50.0.191.16
-  description: Loggly
-- subnet: 76.218.213.252
-  description: Yup

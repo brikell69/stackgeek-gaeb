@@ -224,8 +224,8 @@ class CallbackSocialLoginHandler(BaseHandler):
                 else:
                     # Social user does not exists. Need show login and registration forms!
                     twitter_helper.save_association_data(user_data)
-                    message = _('This Twitter account is not associated with a TinyProbe account. '
-                                'Please sign in or create a TinyProbe account before continuing.')
+                    message = _('This Twitter account is not associated with a StackGeek account. '
+                                'Please sign in or create a StackGeek account before continuing.')
                     self.add_message(message, 'warning')
                     self.redirect_to('login')
 
@@ -261,7 +261,7 @@ class CallbackSocialLoginHandler(BaseHandler):
                     )
                     social_user.put()
 
-                    message = _('The TinyProbe application has been added to your Github account.')
+                    message = _('The StackGeek application has been added to your Github account.')
                     self.add_message(message, 'success')
                 else:
                     message = _('The currently logged in Github account is already in use with another account.')
@@ -299,8 +299,8 @@ class CallbackSocialLoginHandler(BaseHandler):
                 else:
                     # Social user does not exists. Need show login and registration forms!
                     github_helper.save_association_data(user_data)
-                    message = _('This Github account is not associated with a TinyProbe account. '
-                                'Please sign in or create a TinyProbe account before continuing.')
+                    message = _('This Github account is not associated with a StackGeek account. '
+                                'Please sign in or create a StackGeek account before continuing.')
                     self.add_message(message, 'warning')
                     self.redirect_to('login')
 
@@ -355,8 +355,8 @@ class CallbackSocialLoginHandler(BaseHandler):
                     logVisit.put()
                     self.redirect_to('home')
                 else:
-                    message = _('This OpenID based account is not associated with a TinyProbe account. '
-                                'Please sign in or create a TinyProbe account before continuing.')
+                    message = _('This OpenID based account is not associated with a StackGeek account. '
+                                'Please sign in or create a StackGeek account before continuing.')
                     self.add_message(message, 'warning')
                     self.redirect_to('login')
         else:
@@ -419,7 +419,7 @@ class PreRegisterHandler(PreRegisterBaseHandler):
         #if (user_info.activated == False):
         if True:
             # send email
-            subject =  _("TinyProbe Signup Link")
+            subject =  _("StackGeek Signup Link")
             encoded_email = utils.encode(email)
             confirmation_url = self.uri_for("register",
                 encoded_email = encoded_email,
@@ -531,9 +531,9 @@ class RegisterHandler(RegisterBaseHandler):
             # If the user didn't register using registration form ???
             db_user = self.auth.get_user_by_password(user[1].auth_ids[0], password)
             
-            message = _('Welcome %s, you are now logged in.' % '<strong>{0:>s}</strong>'.format(username) )
+            message = _('Welcome %s, you are now logged in.  Please fill out the rest of your profile!' % '<strong>{0:>s}</strong>'.format(username) )
             self.add_message(message, 'success')
-            return self.redirect_to('home')
+            return self.redirect_to('edit-profile')
 
 
 class EditProfileHandler(BaseHandler):
@@ -555,6 +555,9 @@ class EditProfileHandler(BaseHandler):
             self.form.name.data = user_info.name
             self.form.last_name.data = user_info.last_name
             self.form.country.data = user_info.country
+            self.form.bio.data = user_info.bio
+            self.form.gravatar_url.data = user_info.gravatar_url
+            self.form.twitter_widget_id.data = user_info.twitter_widget_id
             providers_info = user_info.get_social_providers_info()
             params['used_providers'] = providers_info['used']
             params['unused_providers'] = providers_info['unused']
@@ -571,8 +574,11 @@ class EditProfileHandler(BaseHandler):
         username = self.form.username.data.lower()
         name = self.form.name.data.strip()
         last_name = self.form.last_name.data.strip()
-        country = self.form.country.data
-
+        country = self.form.country.data.strip()
+        bio = self.form.bio.data.strip()
+        twitter_widget_id = self.form.twitter_widget_id.data.strip()
+        gravatar_url = self.form.gravatar_url.data.strip()
+        
         try:
             user_info = models.User.get_by_id(long(self.user_id))
 
@@ -604,6 +610,9 @@ class EditProfileHandler(BaseHandler):
                 user_info.name=name
                 user_info.last_name=last_name
                 user_info.country=country
+                user_info.bio=bio
+                user_info.twitter_widget_id=twitter_widget_id
+                user_info.gravatar_url=gravatar_url
                 user_info.put()
                 message+= " " + _('Thanks, your settings have been saved.  You may now dance.')
                 self.add_message(message, 'success')

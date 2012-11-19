@@ -72,6 +72,7 @@ def handle_error(request, response, exception):
     c = {
         'exception': str(exception),
         'url': request.url,
+        'base_layout': config.base_layout
         }
     status_int = hasattr(exception, 'status_int') and exception.status_int or 500
     template = config.error_templates[status_int]

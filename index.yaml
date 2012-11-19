@@ -14,3 +14,32 @@ indexes:
   properties:
   - name: owner
   - name: command
+
+- kind: Article
+  properties:
+  - name: article_type
+  - name: owner
+  - name: created
+    direction: desc
+
+- kind: Article
+  properties:
+  - name: owner
+  - name: created
+    direction: desc
+
+- kind: Post
+  properties:
+  - name: owner
+  - name: created
+
+- kind: Post
+  properties:
+  - name: owner
+  - name: created
+    direction: desc
+
+- kind: Post
+  properties:
+  - name: owner
+  - name: updated

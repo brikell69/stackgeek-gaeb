@@ -5,10 +5,11 @@ import random
 import hashlib
 import string
 import unicodedata
+import cgi
 from datetime import datetime, timedelta
 import Cookie
-
 import config
+import logging
 
 def random_string(size=6, chars=string.ascii_letters + string.digits):
     """ Generate random string """
@@ -132,7 +133,8 @@ def get_device(cls):
     uastring = cls.request.user_agent or 'unknown'
     is_mobile = (("Mobile" in uastring and "Safari" in uastring) or\
                  ("Windows Phone OS" in uastring and "IEMobile" in uastring) or\
-                 ("Blackberry") in uastring)
+                 ("Blackberry" in uastring) or\
+                 ("Android" in uastring))
 
     if "MSIE" in uastring:
         browser = "Explorer"
@@ -203,6 +205,7 @@ def slugify(value):
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = unicode(_slugify_strip_re.sub('', value).strip().lower())
     return _slugify_hyphenate_re.sub('-', value)
+
 
 # TODO: Use locale (Babel)
 COUNTRIES = [

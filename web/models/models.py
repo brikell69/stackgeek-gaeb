@@ -19,22 +19,21 @@ class User(User):
     last_name = ndb.StringProperty()
     email = ndb.StringProperty()
     company = ndb.StringProperty()
+    bio = ndb.StringProperty()
     password = ndb.StringProperty()
     country = ndb.StringProperty()
     gravatar_url = ndb.StringProperty()
+    twitter_widget_id = ndb.StringProperty()
     activated = ndb.BooleanProperty(default=False)
     
     @classmethod
     def get_by_email(cls, email):
-        """Returns a user object based on an email.
-
-        :param email:
-            String representing the user email. Examples:
-
-        :returns:
-            A user object.
-        """
         return cls.query(cls.email == email).get()
+
+
+    @classmethod
+    def get_by_username(cls, username):
+        return cls.query(cls.username == username).get()
 
     def get_social_providers_names(self):
         social_user_objects = SocialUser.get_by_user(self.key)
@@ -124,37 +123,59 @@ class SocialUser(ndb.Model):
     def open_id_providers():
         return [k for k,v in SocialUser.PROVIDERS_INFO.items() if v['uri']]
 
-class App(ndb.Model):
+
+class Article(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     owner = ndb.KeyProperty(kind=User)
-    name = ndb.StringProperty()
-    description = ndb.StringProperty()
-    preview = ndb.StringProperty()
-    command = ndb.StringProperty()
+    title = ndb.StringProperty()
+    summary = ndb.StringProperty()
+    url = ndb.StringProperty()
+    slug = ndb.StringProperty()
+    article_type = ndb.StringProperty()
     gist_id = ndb.StringProperty()
-    activated = ndb.BooleanProperty(default=True)
-    public = ndb.BooleanProperty(default=True)
-
-
+    public = ndb.BooleanProperty(default=False)
+    draft = ndb.BooleanProperty(default=True)
+    
     @classmethod
-    def get_by_user_and_command(cls, user, command):
-        # get() a single app by user/command
-        gist = cls.query(cls.owner == user, cls.command == command).get()
-        return gist
-
+    def delete_by_user(cls, user):
+        article_query = cls.query().filter(cls.owner == user)
+        articles = article_query.fetch()
+        keys = []
+        for x in articles:
+            keys.append(x.key)
+        return ndb.delete_multi(keys)
+    
 
     @classmethod
     def get_by_user_and_gist_id(cls, user, gist_id):
-        # get() a single app by user/gist_id
+        # get() a single article by user/gist_id
         gist = cls.query(cls.owner == user, cls.gist_id == gist_id).get()
         # logging.info("value is: %s" % gist)
         return gist
 
+
     @classmethod
-    def get_by_user(cls, user):
-        app_query = cls.query().filter(cls.owner == user).order(App.command)
-        gists = app_query.fetch()
+    def get_all(cls):
+        article_query = cls.query().filter().order(-Article.created)
+        gists = article_query.fetch()
         return gists
 
 
+    @classmethod
+    def get_by_user(cls, user):
+        article_query = cls.query().filter(cls.owner == user).order(-Article.created)
+        gists = article_query.fetch()
+        return gists
+
+    @classmethod
+    def get_by_user_and_type(cls, user, article_type):
+        article_query = cls.query().filter(cls.owner == user, cls.article_type == article_type).order(-Article.created)
+        gists = article_query.fetch()
+        return gists
+
+    @classmethod
+    def get_by_user_and_slug(cls, user, slug):
+        article_query = cls.query().filter(cls.owner == user, cls.slug == slug)
+        gist = article_query.get()
+        return gist

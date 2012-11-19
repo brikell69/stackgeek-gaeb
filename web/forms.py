@@ -22,24 +22,24 @@ class FormTranslations(object):
 
 
 class BaseForm(Form):
-    
     def __init__(self, request_handler):
         super(BaseForm, self).__init__(request_handler.request.POST)
     def _get_translations(self):
         return FormTranslations()
 
-class AppForm(BaseForm):
-    appname = fields.TextField(_('App_Name'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH)], id='appname')
-    appdescription = fields.TextField(_('App_Description'), [validators.Required(), validators.Length(max=140)], id='appdescription')
-    appcommand = fields.TextField(_('App_Command'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH), validators.regexp(utils.ALPHANUMERIC_REGEXP, message=_('Command string is invalid. Letters and numbers only!'))], id='appcommand')
+class BlogArticleForm(BaseForm):
+    title = fields.TextField(_('Article_Title'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH)], id='title')
+    summary = fields.TextField(_('Article_Summary'), [validators.Required(), validators.Length(max=140)], id='summary')
+    article_type = fields.SelectField(_('Article Type'), [validators.Required()], choices=[('post', 'Blog Post'), ('guide', 'Guide'), ('video', 'Video')])   
+    pass
 
 class CurrentPasswordMixin(BaseForm):
     current_password = fields.TextField(_('Password'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH)])
-
+    pass
 
 class PasswordMixin(BaseForm):
     password = fields.TextField(_('Password'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH)])
-
+    pass
 
 class UserMixin(BaseForm):
     username = fields.TextField(_('Username'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH), validators.regexp(utils.ALPHANUMERIC_REGEXP, message=_('Username invalid. Use only letters and numbers.'))])
@@ -67,8 +67,10 @@ class ContactForm(BaseForm):
     name = fields.TextField(_('Name'), [validators.Required(), validators.Length(max=FIELD_MAXLENGTH)])
     message = fields.TextAreaField(_('Message'), [validators.Required(), validators.Length(max=65536)])
 
+
 class RegisterForm(PasswordMixin, UserMixin):
     pass
+
 
 class PreRegisterForm(PasswordMixin, UserMixin):
     email = fields.TextField(_('Email'), [validators.Required(), validators.Length(min=7, max=FIELD_MAXLENGTH), validators.regexp(utils.EMAIL_REGEXP, message=_('Invalid email address.'))])
@@ -84,6 +86,9 @@ class EditProfileForm(UserMixin):
     name = fields.TextField(_('Name'), [validators.Length(max=FIELD_MAXLENGTH)])
     last_name = fields.TextField(_('Last_Name'), [validators.Length(max=FIELD_MAXLENGTH)])
     company = fields.TextField(_('Company'))
+    bio = fields.TextAreaField(_('Bio'))
+    gravatar_url = fields.TextField(_('Gravatar URL'))
+    twitter_widget_id = fields.TextField(_('Twitter Widget ID'))
     country = fields.SelectField(_('Country'), choices=utils.COUNTRIES)   
     pass
 

@@ -5,8 +5,11 @@ Main Site Handlers
 """
 # standard library imports
 import logging, os
-import urllib, urllib2, hashlib, json, httplib2
-from lib.i18n import get_territory_from_ip
+import urllib, urllib2, hashlib, httplib2
+import json
+import datetime
+import unicodedata
+import re
 
 # related third party imports
 import webapp2
@@ -14,19 +17,27 @@ from webapp2_extras import security
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from webapp2_extras.i18n import gettext as _
 from webapp2_extras.appengine.auth.models import Unique
+from web.basehandler import BaseHandler
+from web.basehandler import user_required
+
+# google shizzle
 from google.appengine.api import taskqueue
+from google.appengine.api import channel
+from google.appengine.ext import db
 
 # local application/library specific imports
 import config
 import web.forms as forms
 import web.models.models as models
 from lib import utils, httpagentparser, captcha
-from web.basehandler import BaseHandler
-from web.basehandler import user_required
+from lib.i18n import get_territory_from_ip
+import bleach
+import html5lib
 
 # social login
 from lib.github import github
 from lib.twitter import twitter
+from lib.markdown import markdown
 
 
 class SendEmailHandler(BaseHandler):
@@ -87,7 +98,7 @@ class ContactHandler(BaseHandler):
             "exception" : self.request.get('exception')
             }
 
-        return self.render_template('contact.html', **params)
+        return self.render_template('site/contact.html', **params)
 
     def post(self):
         """ validate contact form """
@@ -143,30 +154,75 @@ class ContactHandler(BaseHandler):
         return forms.ContactForm(self)
 
 
+class channelHandler(BaseHandler):
+    def get(self):
+        logging.info("some channel thang")
+        return
+
+
 class HomeRequestHandler(BaseHandler):
-    """
-    Handler to show the home page
-    """
+    def get(self, username=None):
+        # load articles in from db and github, stuff them in an array
+        articles = models.Article.get_all()
+        blogposts = []
 
-    def get(self):
-        """ Returns a simple HTML form for home """
-        params = {}
-        return self.render_template('home.html', **params)
+        # loop through all articles
+        for article in articles:
+            # if there's content on Github to serve
+            raw_gist_content = github.get_raw_gist_content(article.gist_id)
 
+            # if github gist exists for the entry
+            if raw_gist_content:
+                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_title = bleach.clean(article.title)
+                
+                # created and by whom
+                date_format = "%a, %d %b %Y"
+                created = article.created.strftime(date_format)
+                owner_info = models.User.get_by_id(article.owner.id())
+                # build entry
+                entry = {
+                    'created': created,
+                    'article_id': article.key.id(),
+                    'article_title': article_title,
+                    'article_type': article.article_type, 
+                    'article_html': article_html,
+                    'article_slug': article.slug,
+                    'article_owner': owner_info.username,
+                    'article_host': self.request.host,
+                }
+                if article.article_type == 'post' and article.public and not article.draft:
+                    blogposts.append(entry)
 
-class CompanyHandler(BaseHandler):
-    def get(self):
-        logging.info("value is: %s" % self.request.path)
-        params = {}
-        if self.request.path == '/company/pricing/':
-            return self.render_template('company/pricing.html', **params)
+        # see if we have any blog posts - unlikely we don't
+        if len(blogposts) > 0:
+            params = {'blogpost': blogposts[0], 'archives': blogposts} 
         else:
-            return self.render_template('home.html', **params)
+            params = {'blogpost': {} }
+
+        return self.render_template('site/home.html', **params)
 
 
+class AboutHandler(BaseHandler):
+    def get(self):
+        params = {}
+        return self.render_template('site/about.html', **params)
 
 
+class ForumsHandler(BaseHandler):
+    def get(self):
+        params = {}
+        return self.render_template('site/forums.html', **params)
 
 
+class VideosHandler(BaseHandler):
+    def get(self):
+        params = {}
+        return self.render_template('site/videos.html', **params)
 
+
+class TermsHandler(BaseHandler):
+    def get(self):
+        params = {}
+        return self.render_template('site/terms.html', **params)
 

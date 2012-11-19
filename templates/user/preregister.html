@@ -1,7 +1,11 @@
 {% extends base_layout %}
 
-{% block header_title %}
-        {% trans %}Sign Up{% endtrans %}
+{% block title %}
+  {% trans %}Register{% endtrans %}
+{% endblock %}
+
+{% block extra_nav %}
+    {{ macros.nav_menu('join', user_id) }}
 {% endblock %}
 
 {% block header_title_lead %}

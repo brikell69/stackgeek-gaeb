@@ -7,22 +7,29 @@ RedirectRoute: http://webapp-improved.appspot.com/api/webapp2_extras/routes.html
 from webapp2_extras.routes import RedirectRoute
 from web import handlers
 from web.users import userhandlers
-from web.apps import apphandlers
-from web.shell import shellhandlers
+from web.blog import bloghandlers
 
 secure_scheme = 'https'
 
 _routes = [
-    # apps
-    RedirectRoute('/apps/new/', apphandlers.AppsCreateHandler, name='apps-new', strict_slash=True),
-    RedirectRoute('/apps/', apphandlers.AppsListHandler, name='apps', strict_slash=True),
-    RedirectRoute('/apps/refresh/', apphandlers.AppsRefreshHandler, name='apps-refresh', strict_slash=True),
-    RedirectRoute('/apps/public/', apphandlers.AppsPublicHandler, name='apps-public', strict_slash=True),
-    RedirectRoute('/apps/buildlist/', apphandlers.AppsBuildListHandler, name='apps-public', strict_slash=True),
-    RedirectRoute('/apps/<app_id>/', apphandlers.AppsDetailHandler, name='apps-detail', strict_slash=True),
+    # redirects - don't delete
+    RedirectRoute('/company/index.html', redirect_to_name='about'),
+    RedirectRoute('/blog/index.html', redirect_to_name='blog'),
+    RedirectRoute('/guides/index.html', redirect_to_name='guides'),
+    RedirectRoute('/blog/archive.html', redirect_to_name='blog'),
 
-    # shell
-    RedirectRoute('/shell/', shellhandlers.ShellHandler, name='shell', strict_slash=True),
+    # our breadwinner - don't delete
+    RedirectRoute('/blog/kordless/guides/gettingstarted.html', redirect_to_name='guides-article', defaults={'slug': 'gettingstarted.html'}),
+
+    # redirects for a bad slug we had - remove 1/1/13
+    RedirectRoute('/blog/kordless/posts/increase-the-size-of-devstack-s-volumes', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
+    RedirectRoute('/blog/kordless/post/increase-the-size-of-devstack-s-volumes', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
+    
+    # old format for blog posts - leave in place
+    RedirectRoute('/2012/02/21/taking-openstack-for-a-spin/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'taking-openstack-for-a-spin'}),
+    RedirectRoute('/2012/04/28/increase-the-size-of-devstacks-volumes/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
+    RedirectRoute('/2012/04/28/increase-the-size-devstacks-cloud-volumes/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
+    RedirectRoute('/2012/04/08/open-source-private-cloud-support/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'comparison-of-open-source-cloud-support-for-ec2'}),
 
     # mail processing
     RedirectRoute('/taskqueue-send-email/', handlers.SendEmailHandler, name='taskqueue-send-email', strict_slash=True),
@@ -49,9 +56,34 @@ _routes = [
 
     # website pages
     RedirectRoute('/', handlers.HomeRequestHandler, name='home', strict_slash=True),
-    RedirectRoute('/company/', handlers.CompanyHandler, name='company', strict_slash=True),
-    RedirectRoute('/company/pricing/', handlers.CompanyHandler, name='pricing', strict_slash=True),
+    RedirectRoute('/forums/', handlers.ForumsHandler, name='forums', strict_slash=True),
+    RedirectRoute('/videos/', handlers.VideosHandler, name='videos', strict_slash=True),
+    RedirectRoute('/about/', handlers.AboutHandler, name='about', strict_slash=True),
+    RedirectRoute('/terms/', handlers.TermsHandler, name='terms', strict_slash=True),
     RedirectRoute('/contact/', handlers.ContactHandler, name='contact', strict_slash=True),
+
+    # blog handlers
+    RedirectRoute('/blog/', bloghandlers.PublicBlogHandler, name='blog', strict_slash=True),
+    RedirectRoute('/blog/feed/rss/', bloghandlers.PublicBlogRSSHandler, name='blog-rss', strict_slash=True),
+    RedirectRoute('/blog/refresh/', bloghandlers.BlogRefreshHandler, name='blog-refresh', strict_slash=True),
+    RedirectRoute('/blog/buildlist/', bloghandlers.BlogBuildListHandler, name='blog-build', strict_slash=True),
+    RedirectRoute('/blog/menu/<menu_id>', bloghandlers.BlogUserMenuHandler, name='blog-menu', strict_slash=True), # see class for fix info
+    RedirectRoute('/blog/<username>/new/', bloghandlers.BlogArticleCreateHandler, name='blog-article-create', strict_slash=True),
+    RedirectRoute('/blog/<username>/articles/', bloghandlers.BlogArticleListHandler, name='blog-article-list', strict_slash=True),
+    RedirectRoute('/blog/<username>/<article_id>/refresh/', bloghandlers.BlogClearCacheHandler, name='blog-clearcache', strict_slash=True),
+    RedirectRoute('/blog/<username>/<article_type>/<slug>', bloghandlers.BlogArticleSlugHandler, name='blog-article-slug', strict_slash=True),
+    RedirectRoute('/blog/<username>/<article_id>/', bloghandlers.BlogArticleActionsHandler, name='blog-article-actions', strict_slash=True),
+    RedirectRoute('/blog/<username>/', bloghandlers.BlogUserHandler, name='blog-user', strict_slash=True),
+    RedirectRoute('/blog/<username>/feed/rss/', bloghandlers.BlogUserRSSHandler, name='blog-user-rss', strict_slash=True),
+    RedirectRoute('/guides/', bloghandlers.PublicGuideHandler, name='guides', strict_slash=True),
+
+    # throwback URLs for old stackgeek.com site - do not include in gae-boilerplate changes
+    RedirectRoute('/guides/<slug>', bloghandlers.BlogArticleSlugHandler, name='guides-article', strict_slash=True),
+
+    # channel watcher
+    RedirectRoute('/_ah/channel/connected/', handlers.channelHandler, name='channel-connected', strict_slash=True),
+    RedirectRoute('/_ah/channel/disconnected/', handlers.channelHandler, name='channel-disconnected', strict_slash=True),
+    RedirectRoute('/_ah/channel/dev', handlers.channelHandler, name='channel-dev', strict_slash=True), 
 ]
 
 def get_routes():

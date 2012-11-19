@@ -1,0 +1,64 @@
+{% extends base_layout %}
+
+<!-- Set Title -->
+{% block title %}
+  {% trans %}Videos{% endtrans %}
+{% endblock %}
+
+{% block extra_nav %}
+	{{ macros.nav_menu('videos', user_id) }}
+{% endblock %}
+
+{% block header_title_lead %}
+    <h1>Video Tutorials</h1>
+    <p class="lead">
+      The following videos are hosted on <a href="http://vimeo.com/stackgeek">StackGeek's Vimeo account</a>.  Current filters include <a href="#" data-filter=".openstack">OpenStack</a>, <a href="#" data-filter=".devstack">DevStack</a> and <a href="#" data-filter=".demos">Demos</a>.
+    </p>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div id="videos" class="span12">
+		<div class="thumbnails box openstack">
+			<span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/42010112?byline=0&portrait=0&color=ff9933" width="340" height="250" frameborder="0">&nbsp;</iframe><p class="video-label">Installing OpenStack on Ubuntu</p></span>
+		</div>
+		<div class="thumbnails box demos openstack">
+			<span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/41807514?byline=0&portrait=0&color=ff9933" width="340" height="250" frameborder="0">&nbsp;</iframe><p class="video-label">OpenStack Introduction</p></span>
+		</div>
+		<div class="thumbnails box devstack openstack">
+			<span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/39055026?byline=0&portrait=0&color=ff9933" width="340" height="250" frameborder="0">&nbsp;</iframe><p class="video-label">Installing DevStack on Ubuntu</p></span>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block mediaJS %}
+<script type="text/javascript" src="/js/libs/isotope.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var $container = $('#videos');
+    $container.isotope({
+        filter: '*',
+        animationOptions: {
+            duration: 250,
+            easing: 'linear',
+            queue: false,
+        }
+    });
+	$('.lead a').click(function(){
+		console.log("foo");
+	    var $container = $('#videos');
+	    var selector = $(this).attr('data-filter');
+	    $container.isotope({
+	        filter: selector,
+	        animationOptions: {
+	            duration: 250,
+	            easing: 'linear',
+	            queue: false,
+	        }
+	    });
+  		return false;
+	});
+});
+</script>
+{% endblock %}

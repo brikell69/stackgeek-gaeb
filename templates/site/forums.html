@@ -1,0 +1,54 @@
+{% extends base_layout %}
+
+{% block title %}
+        {% trans %}Forums{% endtrans %}
+{% endblock %}
+
+{% block header_title_lead %}
+    <h1>Forums</h1>
+    <p class="lead-forum">
+      Welcome to the StackGeek forums.  You can also <a href="https://groups.google.com/forum/?fromgroups#!forum/stackgeek">access the group directly on Google Groups</a>.
+    </p>
+{% endblock %}
+
+{% block extra_nav %}
+  {{ macros.nav_menu('forums', user_id) }}
+{% endblock %}
+
+{% block content %}
+<iframe id="forum_embed"
+  src="javascript:void(0)"
+  scrolling="no"
+  frameborder="0"
+  width="1120"
+  height="900">
+</iframe>
+<script type="text/javascript">
+  document.getElementById('forum_embed').src =
+     'https://groups.google.com/forum/embed/?place=forum/stackgeek'
+     + '&showsearch=true&showpopout=true&showtabs=false';
+</script>
+{% endblock %}
+
+{% block mediaJS %}
+<script type="text/javascript">
+    $().ready(function() {
+        $("#form_register").validate({
+            submitHandler: function(form) {
+                    form.submit();
+            },
+            rules: {
+                password: 'required',
+                c_password: {
+                    required: true,
+                    equalTo: '#password'
+                }
+            },
+            errorPlacement: function(error, element) {
+                element.parent().parent().addClass("error");
+                error.addClass("help-inline").appendTo( element.parent() );
+            }
+        });
+    });
+</script>
+{% endblock %}

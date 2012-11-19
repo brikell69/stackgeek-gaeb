@@ -53,6 +53,7 @@
   display: inherit !important;
 }
 
+
 @media (min-width: 1200px) {
   .row {
     margin-left: -30px;
@@ -399,6 +400,8 @@
   }
 }
 
+/* comment out the following rule entirely in order to disable it */
+/*
 @media (max-width: 979px) {
   body {
     padding-top: 0;
@@ -537,3 +540,4 @@
     overflow: visible !important;
   }
 }
+/* */

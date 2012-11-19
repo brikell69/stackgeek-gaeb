@@ -1,0 +1,178 @@
+{% extends base_layout %}
+
+<!-- Set Title -->
+{% block title %}
+  {% trans %}Home{% endtrans %}
+{% endblock %}
+
+{% block header_title_lead %}{% endblock %}
+
+      {% block hero %}
+      <div class='hero'>
+        <div class='container'>
+          <h2 id="blurb">Become an epic infrastructure expert.</h2>
+          <div class='big-media'>
+            <div id="shell">
+              <img src="/img/dude.png" id="dude"/>
+              <img src="/img/cloud1.png" id="cloud1"/>
+              <img src="/img/cloud2.png" id="cloud2"/>
+              <img src="/img/cloud3.png" id="cloud3"/>
+              <img src="/img/cloud4.png" id="cloud4"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+
+      {% block extra_nav %}
+        {{ macros.nav_menu('home', user_id) }}
+      {% endblock %}
+
+      {% block header %}{% endblock %}
+
+      {% block content %}
+      <div class='container content'>
+       
+      </div>
+      <div class="marketing">
+        <div class="row">
+          {% if is_mobile %}
+          <div class="span3">
+            <a class="twitter-timeline" href="https://twitter.com/stackgeek" data-widget-id="264213994309558272">Tweets by @stackgeek</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+          {% endif %}
+          <div class="span9">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#blog-posts" data-toggle="tab">Blog Posts</a></li>
+              <li><a href="#video-posts" data-toggle="tab">Videos</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="blog-posts">
+                <div class="blog apost">
+                  <h2 class="postdetail"><a href="/blog/{{ blogpost.article_owner }}/post/{{ blogpost.article_slug }}">{{ blogpost.article_title }}</a></h2>
+                  <div class="date_social">
+                    <div class="date"><span class="label label-important">{{ blogpost.created }}</span></div>
+                    {% if user_id %}
+                      {{ macros.fork_gist_widget(blogpost.article_owner, blogpost.article_id) }}
+                    {% endif %}
+                    {{ macros.g_plus_widget("http://%s/blog/%s/%s/%s"%(blogpost.article_host, blogpost.article_owner, blogpost.article_type, blogpost.article_slug)) }}
+                    {{ macros.tweet_widget("http://%s/blog/%s/%s/%s"%(blogpost.article_host, blogpost.article_owner, blogpost.article_type, blogpost.article_slug), blogpost.article_summary) }}
+                  </div>
+                  <p>by <a href="/blog/{{ blogpost.article_owner }}">{{ blogpost.article_owner }}</a>
+                  {{blogpost.article_html}}
+                  <a class="btn" href="/blog/{{ blogpost.article_owner }}/post/{{ blogpost.article_slug }}#comments">View Comments</a>
+                  <a class="btn" href="/blog/">View More Posts</a>
+                </div>
+              </div>
+              <div class="tab-pane" style="width: 370px;" id="video-posts">
+                <p class="filters">
+                  Filter by <a href="#" data-filter=".openstack">OpenStack</a>, <a href="#" data-filter=".devstack">DevStack</a> and <a href="#" data-filter=".demos">Demos</a>.
+                </p>
+                <div id="videos" class="span9">
+                  <div class="thumbnails box openstack">
+                    <span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/42010112?byline=0&portrait=0&color=ff9933" width="360" height="270" frameborder="0">&nbsp;</iframe><p class="video-label">Installing OpenStack on Ubuntu</p></span>
+                  </div>
+                  <div class="thumbnails box demos openstack">
+                    <span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/41807514?byline=0&portrait=0&color=ff9933" width="360" height="270" frameborder="0">&nbsp;</iframe><p class="video-label">OpenStack Introduction</p></span>
+                  </div>
+                  <div class="thumbnails box devstack openstack">
+                    <span class="thumbnail" target="_blank"><iframe src="http://player.vimeo.com/video/39055026?byline=0&portrait=0&color=ff9933" width="360" height="270" frameborder="0">&nbsp;</iframe><p class="video-label">Installing DevStack on Ubuntu</p></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if not is_mobile %}
+          <div class="span3">
+            <div class="recent_posts">
+              <h3>Recent Posts</h3>
+              {% for item in archives %}
+                <p><a href="{{ 'http://%s/blog/%s/%s/%s' % (item.article_host, item.article_owner, item.article_type, item.article_slug) }}">{{ item.article_title }}</a></p>
+                <p class="recent_author">by <a href="#">{{ item.article_owner }}</a>
+              {% endfor %}
+            </div>
+            <a class="twitter-timeline" href="https://twitter.com/stackgeek" data-widget-id="264213994309558272">Tweets by @stackgeek</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+          {% endif %}
+        </div><!--/row-->
+        <hr class="soften">
+      </div>
+        <blockquote class='big-quote'>
+          <h2>
+            "StackGeek is what you'd get if Big Data & Cloud Computing had a baby, minus the crap."
+          </h2>
+          <small>
+            Kord Campbell, StackGeek Founder
+          </small>
+        </blockquote>
+      </div>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#cloud1').plaxify({"xRange":20,"yRange":10, "invert": false});
+        $('#cloud2').plaxify({"xRange":30,"yRange":10, "invert": false});
+        $('#cloud3').plaxify({"xRange":20,"yRange":10, "invert": true});
+        $('#cloud4').plaxify({"xRange":30,"yRange":10, "invert": true});
+        $.plax.enable();
+      })
+    </script>
+{% endblock %}
+
+{% block mediaJS %}
+<script type="text/javascript" src="/js/libs/isotope.js"></script>
+<script type="text/javascript">
+    $().ready(function() {
+        $("#form_login_user").validate({
+            submitHandler: function(form) {
+                form.submit();
+            },
+            errorPlacement: function(error, element) {
+                element.parent().parent().addClass("error");
+                error.addClass("help-inline").appendTo( element.parent() );
+            }
+        });
+        $("#form_register").validate({
+            submitHandler: function(form) {
+                form.submit();
+            },
+            rules: {
+                password: 'required',
+                c_password: {
+                    required: true,
+                    equalTo: '#password'
+                }
+            },
+            errorPlacement: function(error, element) {
+                element.parent().parent().addClass("error");
+                error.addClass("help-inline").appendTo( element.parent() );
+            }
+        });
+        var $container = $('#videos');
+        $container.isotope({
+          filter: '*',
+          animationOptions: {
+            duration: 250,
+            easing: 'linear',
+            queue: false,
+          }
+        });
+        $('.filters a').click(function(){
+          console.log("here");
+          var $container = $('#videos');
+          var selector = $(this).attr('data-filter');
+          console.log(selector);
+          $container.isotope({
+            filter: selector,
+            animationOptions: {
+              duration: 250,
+              easing: 'linear',
+              queue: false,
+            }
+          });
+          return false;
+        });
+    });
+</script>
+{% endblock %}
+

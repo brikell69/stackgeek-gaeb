@@ -7,31 +7,38 @@
 <head>
     <meta charset="utf-8">
 
-    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <title>{{ app_name }} - {% block title %}{% endblock %}</title>
+    
     <!--[if lt IE 9]>
       <script src='//html5shim.googlecode.com/svn/trunk/html5.js'></script>
     <![endif]-->
+    
+    {% block description %}
+    <meta name="description" content="StackGeek provides information and opinions on operational patforms, including Google's AppEngine, Amazon AWS, and OpenStack.">
+    {% endblock %}
 
-    <meta name="description" content="TinyProbe is a lightweight application analytics platform built on top of Google Big Query.">
-    <meta name="author" content="Kord Campbell <kordless@tinyprobe.com>">
-    <meta name="keywords" content="application intellegence analytics logs events api">
-    <meta name="generator" content="Google App Engine Boilerplate 2.2">
+    <!-- Who's responsible for this crap? -->
+    <meta name="author" content="Kord Campbell <kordless@stackgeek.com>">
+    <meta name="keywords" content="cloud computing hosting paas iaas big data operations monitoring analytics applications">
+    <meta name="generator" content="http://github.com/coto/gae-boilerplate">
 
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.8.0.min.js"><\/script>')</script>
-
-    <!-- Mobile viewport optimized: h5bp.com/viewport -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/libs/plax.js"></script>
+    
+    <!-- Styles and Whatnot -->
     <link rel="shortcut icon" href="/favicon.ico">
-    {% if is_mobile %}
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    {% endif %}
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/tinyprobe.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-toggle.css">
+    <link rel="stylesheet" href="/css/stackgeek.css">
+    
     {% block mediaCSS %}{% endblock %}
+    
+    {% block rssfeed %}{% endblock %}
+    
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', '{{ google_analytics_code }}']);
@@ -55,17 +62,18 @@
                     <span class="icon-chevron-down icon-white"></span>
                 </button>
                 <a class="brand" href="/">
-                  <img alt="TinyProbe" height="18" src="/img/logo.png" style="margin-bottom: -1px;" width="18"><span>TinyProbe</span>
+                  <span>StackGeek</span><i class="icon-comment"></i>
                 </a>
                 <div class="nav-collapse">
-                    <ul class="nav pull-right">
+                    <ul class="nav pull-right nav-pills">
                         {% block extra_nav %}{% endblock %}
                         {% if user_id %}
-                        <li class="dropdown">
+                        <li id="user" class="dropdown">
                             <button class="btn btn-inverse" data-toggle="dropdown">@{{ username }} <b class="caret"></b></button>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ uri_for("shell") }}" target="_blank">{% trans %}New Shell{% endtrans %}</a></li> 
-                                <li><a href="{{ uri_for("apps") }}">{% trans %}My Apps{% endtrans %}</a></li>                               
+                                <li><a href="{{uri_for('blog-menu', menu_id='newarticle') }}">{% trans %}Create a New Article{% endtrans %}</a></li>
+                                <li><a href="{{uri_for('blog-menu', menu_id='myarticles') }}">{% trans %}View My Articles{% endtrans %}</a></li>
+                                <li><a href="{{uri_for('blog-menu', menu_id='mystack') }}">{% trans %}My Stack{% endtrans %}</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ uri_for("edit-profile") }}">{% trans %}Edit Profile{% endtrans %}</a></li>
                                 <li><a href="{{ uri_for("edit-email") }}">{% trans %}Change Email{% endtrans %}</a></li>
@@ -144,33 +152,30 @@
           <div class='span12'>
             <div class='row'>
               <div class='span3'>
-                <h4>Product</h4>
-                <ul class='unstyled'>
-                  <li>
-                    <a href='/shell#demo'>Demo</a>
-                  </li>
-                  <li>
-                    <a href='/features'>Features</a>
-                  </li>
-                  <li>
-                    <a href='/company/pricing'>Pricing</a>
-                  </li>
-                  <li>
-                    <a href='/signup'>Sign Up</a>
-                  </li>
-                </ul>
-              </div>
-              <div class='span3'>
-                <h4>Company</h4>
+                <h4>Content</h4>
                 <ul class='unstyled'>
                   <li>
                     <a href='/blog'>Blog</a>
                   </li>
                   <li>
+                    <a href='/guides'>Guides</a>
+                  </li>
+                  <li>
+                    <a href='/videos'>Videos</a>
+                  </li>
+                </ul>
+              </div>
+              <div class='span3'>
+                <h4>Community</h4>
+                <ul class='unstyled'>
+                  <li>
+                    <a href='/preregister'>Join</a>
+                  </li>
+                  <li>
                     <a href='/about'>About</a>
                   </li>
                   <li>
-                    <a href='/privacy'>Privacy</a>
+                    <a href='/team'>Our Team</a>
                   </li>
                   <li>
                     <a href='/terms'>Terms of Use</a>
@@ -181,13 +186,13 @@
                 <h4>Help</h4>
                 <ul class='unstyled'>
                   <li>
-                    <a href='/support'>Support</a>
+                    <a href='http://github.com/stackgeek/stackgeek-site'>Features and Bugs</a>
                   </li>
                   <li>
-                    <a href='/docs'>Documentation</a>
+                    <a href='/contact'>Contact Us</a>
                   </li>
                   <li>
-                    <a href='http://github.com/tinyprobe'>Code</a>
+                    <a href='/forums'>Forums</a>
                   </li>
                 </ul>
               </div>
@@ -196,16 +201,21 @@
                 <ul class='unstyled'>
                   <li>
                     <div class="span3" id="elsewhere-icons">
-                      <a class="twitter" href="https://twitter.com/tinyprobe" title="Follow @TinyProbe on Twitter">
+                      <a class="twitter" href="https://twitter.com/stackgeek" title="Follow @stackgeek on Twitter">
                         Twitter
                       </a>
-                      <a class="google" href="https://plus.google.com/tinyprobe" title="Check out TinyProbe on Google+">
+                      <a class="google" href="https://plus.google.com/u/0/b/115579176061469070891/115579176061469070891/posts" title="Check out StackGeek on Google+">
                         Facebook
                       </a>
-                      <a class="github" href="http://github.com/tinyprobe" title="Help Hack our Code">
+                      <a class="github" href="http://github.com/stackgeek" title="Help Hack our Code">
                         Blog
                       </a>
                     </div>
+                  </li>
+                  <li>&nbsp;</li>
+                  <li>
+                    <iframe src="http://ghbtns.com/github-btn.html?user=coto&repo=gae-boilerplate&type=fork"
+  allowtransparency="true" frameborder="0" scrolling="0" width="62px" height="20px"></iframe>
                   </li>
                 </ul>
               </div>
@@ -218,7 +228,7 @@
           <div class='row'>
             <div class='span10'>
               <div id='copyright'>
-                <p>&copy; 2012 TinyProbe, Inc. All Rights Reserved.</p>
+                <p>&copy; 2012 StackGeek, Inc. All Rights Reserved.</p>
               </div>
             </div>
           </div>
@@ -240,6 +250,9 @@
     <script type="text/javascript">
       if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
+            $("#join").click(function(e){
+              window.location="{{ uri_for("preregister") }}";
+            });
             setTimeout(function(){
               $('input:-webkit-autofill').each(function(){
                   var text = $(this).val();

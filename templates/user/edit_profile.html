@@ -1,7 +1,8 @@
 {% extends base_layout %}
 
-{% block header_title %}
-        {% trans %}Edit Profile{% endtrans %}
+<!-- Set Title -->
+{% block title %}
+  {% trans %}Edit Profile{% endtrans %}
 {% endblock %}
 
 {% block header_title_lead %}
@@ -11,15 +12,22 @@
     </p>
 {% endblock %}
 
+{% block extra_nav %}
+    {{ macros.nav_menu('', user_id) }}
+{% endblock %}
+
 {% block content %}
 
     <form id="form_edit_profile" action="{{ url|safe }}" method="post" class="well form-horizontal">
         <fieldset>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
             {{ macros.input(form, "username", _("Username"), placeholder=_("Enter your")+" "+_("Username"), class="input-xlarge focused required") }}
-            {{ macros.input(form, "name", _("First Name"), placeholder=_("Enter your")+" "+_("first name"), class="input-xlarge focused") }}
-            {{ macros.input(form, "last_name", _("Last Name"), placeholder=_("Enter your")+" "+_("last Name"), class="input-xlarge focused") }}
-            {{ macros.input(form, "company", _("Company"), placeholder=_("Where you work"), class="input-xlarge focused") }}
+            {{ macros.input(form, "name", _("First Name"), placeholder=_("Enter your")+" "+_("first name"), class="input-xlarge") }}
+            {{ macros.input(form, "last_name", _("Last Name"), placeholder=_("Enter your")+" "+_("last Name"), class="input-xlarge") }}
+            {{ macros.input(form, "bio", _("Bio"), placeholder=_("Enter a short bio."), class="input-xlarge") }}
+            {{ macros.input(form, "company", _("Company"), placeholder=_("Where you work?"), class="input-xlarge") }}
+            {{ macros.input(form, "gravatar_url", _("Gravatar <a target='blank' href='http://gravatar.com/'>Huh?</a>"), placeholder=_("http://1.gravatar.com/avatar/fbe1c266126bf48fd4c9616566d6c198"), class="input-xlarge") }}
+            {{ macros.input(form, "twitter_widget_id", _("Twitter Widget ID <a target='blank' href='https://twitter.com/settings/widgets/new'>Huh?</a>"), placeholder=_("264217253359259648"), class="input-xlarge") }}
             {{ macros.input(form, "country", _("Country")) }}
 
             {% if enable_federated_login %}
@@ -37,8 +45,8 @@
 	                </div>
 	            {% endif %}
 	            {% if unused_providers %}
-	                <div id="trird_party_login" class="form-actions">
-	                    <h4>{% trans %}Associate account with{% endtrans %}:</h4>
+	                <div id="third_party_login" class="form-actions">
+	                    <h4>{% trans %}For the full StackGeek experience you should associate your account with{% endtrans %}:</h4>
 	                    <div class="social-login-icons">
 	                        {% for provider in unused_providers %}
 	                            <a href="{{ provider_uris[provider.name] }}" class="social-btn social-btn-{{ provider.name }}" title="{{ provider.label }}">{{ provider.label }}</a>

@@ -16,11 +16,12 @@
 __author__ = 'Kord Campbell'
 __website__ = 'http://www.tinyprobe.com'
 
-import os,sys
+import os,sys, logging
 
 # install third party libraries
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib/externals'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'web/models'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib'))
 
 import webapp2
 import config
@@ -38,6 +39,8 @@ logging.info("cert_none is %s" % CERT_NONE)
 from web.basehandler import handle_error
 
 app = webapp2.WSGIApplication(debug = os.environ['SERVER_SOFTWARE'].startswith('Dev'), config=config.webapp2_config)
+
+app.debug = True
 
 app.error_handlers[403] = handle_error
 app.error_handlers[404] = handle_error
