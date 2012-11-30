@@ -80,6 +80,19 @@
 {%- endmacro %}
 
 <!-- google plus widget -->
+{% macro hn_widget(data_url, article_title) -%}
+<a href="http://news.ycombinator.com/submit" class="hn-share-button" data-title="{{article_title}}" data-url="{{data_url}}">Vote on HN</a>
+<script>
+    (function(d, t) {
+        var g = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        g.src = '//hnbutton.appspot.com/static/hn.js';
+        s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+</script>
+{%- endmacro %}
+
+<!-- google plus widget -->
 {% macro g_plus_widget(data_url) -%}
     <div class="g-plusone" 
         data-href="{{data_url}}" 

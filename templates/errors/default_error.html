@@ -19,22 +19,17 @@
 {% endblock %}
 
 {% block content %}
-    <div id="content" class="container xled">
-            <p class="lead">
-                Something has gone slightly or horribly wrong.  Slathering noises ensue.  If you think it's serious, use the <a href="/contact">contact</a> form to holler at me and I'll take a look.  Otherwise, head on <a href="/">back home</a> and enjoy your stay!</p>
-            <p class="lead">Cheers,</p>
-            <p class="lead">Kord Campbell</a>
-        </header>
+    <p class="lead">
+        Something has gone slightly or horribly wrong.  Slathering noises ensue.  If you think it's serious, use the <a href="/contact">contact</a> form to holler at me and I'll take a look.  Otherwise, head on <a href="/">back home</a> and enjoy your stay!</p>
+    <p class="lead">Cheers,</p>
+    <p class="lead">Kord Campbell</a>
 
-        {% if messages|safe %}
-            {% for message in messages %}
-            <p class="alert alert-{{ message[1]|safe }}">
-                <a class="close" data-dismiss="alert">×</a>
-                {{ message[0]|safe }}
-            </p>
-            {% endfor %}
-        {% endif %}
-
-        <div class="push"></div>
-    </div><!-- /content -->
+    {% if messages|safe %}
+        {% for message in messages %}
+        <p class="alert alert-{{ message[1]|safe }}">
+            <a class="close" data-dismiss="alert">×</a>
+            {{ message[0]|safe }}
+        </p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
