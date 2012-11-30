@@ -61,7 +61,7 @@
                   </div>
                   <p>by <a href="/blog/{{ blogpost.article_owner }}">{{ blogpost.article_owner }}</a>
                   {{blogpost.article_html}}
-                  <a class="btn" href="/blog/{{ blogpost.article_owner }}/post/{{ blogpost.article_slug }}#comments">View Comments</a>
+                  <a class="btn" href="/blog/{{ blogpost.article_owner }}/post/{{ blogpost.article_slug }}#disqus_thread">0 Comments</a>
                   <a class="btn" href="/blog/">View More Posts</a>
                 </div>
               </div>
@@ -172,6 +172,13 @@
           });
           return false;
         });
+        var disqus_shortname = 'stackgeek';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
     });
 </script>
 {% endblock %}

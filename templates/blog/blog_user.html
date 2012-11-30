@@ -53,7 +53,7 @@
               {{ macros.tweet_widget("http://%s/blog/%s/%s/%s"%(item.article_host, item.article_owner, item.article_type, item.article_slug), item.article_summary) }}
             </div>
             {{item.article_html}}
-            <a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#comment">View Comments</a>
+            <a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#disqus_thread">0 Comments</a>
           </div>
         {% endfor %}
         </div>
@@ -70,7 +70,7 @@
               {{ macros.tweet_widget("/blog/%s/%s/%s"%(item.article_owner, item.article_type, item.article_slug), item.article_summary) }}
             </div>
             {{item.article_html}}
-            <a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#comments">View Comments</a>
+            <a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#disqus_thread">0 Comments</a>
           </div>
         {% endfor %}
         </div>
@@ -84,4 +84,17 @@
     {% endif %}
   </div>
 
+{% endblock %}
+
+{% block mediaJS %}
+<script type="text/javascript">
+var disqus_shortname = 'stackgeek';
+
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 {% endblock %}

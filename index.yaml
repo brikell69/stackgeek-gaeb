@@ -18,7 +18,28 @@ indexes:
 - kind: Article
   properties:
   - name: article_type
+  - name: draft
+  - name: public
+  - name: created
+    direction: desc
+
+- kind: Article
+  properties:
+  - name: article_type
   - name: owner
+  - name: created
+    direction: desc
+
+- kind: Article
+  properties:
+  - name: draft
+  - name: public
+  - name: created
+
+- kind: Article
+  properties:
+  - name: draft
+  - name: public
   - name: created
     direction: desc
 

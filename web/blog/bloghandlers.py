@@ -51,7 +51,10 @@ class PublicBlogHandler(BaseHandler):
         # loop through all articles
         for article in articles:
             # if there's content on Github to serve
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            try:
+                raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            except:
+                continue
 
             if raw_gist_content:
                 # sanitize javascript
@@ -79,7 +82,7 @@ class PublicBlogHandler(BaseHandler):
                 # append article if it's a guide, it's public, and not a draft            
                 if article.article_type == 'post' and article.public and not article.draft:
                     blogposts.append(entry)
-                
+        
         # pack and stuff into template
         params = {'blogposts': blogposts}
         return self.render_template('blog/blog.html', **params)
@@ -192,7 +195,6 @@ class BlogArticleSlugHandler(BaseHandler):
     def get(self, username='kordless', article_type='guides', slug = None):
         # look up our article
         user = models.User.get_by_username(username)
-        logging.info("value is: %s" % user)
         article = models.Article.get_by_user_and_slug(user.key, slug)
         
         if not article:
@@ -254,6 +256,7 @@ class BlogArticleSlugHandler(BaseHandler):
             return self.render_template('blog/blog_article_detail.html', **params)
         
         else:
+            params = {}
             return self.render_template('errors/default_error.html', **params)
 
 

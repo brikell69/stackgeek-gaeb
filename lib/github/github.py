@@ -128,10 +128,10 @@ def get_raw_gist_content(gist_id):
     if markdown is not None:
         return markdown
     else:
-        logging.info("cache miss")
+        logging.info("cache miss for %s" % gist_id)
         try:
             # go fetch the current raw url from the gist_id
-            http = httplib2.Http(cache=None, timeout=None, proxy_info=None)
+            http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
             headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
             gist = simplejson.loads(content)
 
@@ -145,6 +145,7 @@ def get_raw_gist_content(gist_id):
 
             return markdown
         except:
+            logging.info("got an exception while talking to github")
             return False
 
 

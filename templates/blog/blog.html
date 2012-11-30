@@ -39,7 +39,7 @@
 			</div>
 			<p>by <a href="/blog/{{ item.article_owner }}">{{ item.article_owner }}</a>
 			{{ item.article_html }}
-			<a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#comments">View Comments</a>
+			<a class="btn" href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}#disqus_thread">0 Comments</a>
 		</div>
 	{% endfor %}
 	</div>
@@ -58,4 +58,17 @@
 	</div>
 	{% endif %}
 </div>
+{% endblock %}
+
+{% block mediaJS %}
+<script type="text/javascript">
+var disqus_shortname = 'stackgeek';
+
+(function () {
+    var s = document.createElement('script'); s.async = true;
+    s.type = 'text/javascript';
+    s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+}());
+</script>
 {% endblock %}

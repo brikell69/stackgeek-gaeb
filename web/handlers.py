@@ -163,10 +163,11 @@ class channelHandler(BaseHandler):
 class HomeRequestHandler(BaseHandler):
     def get(self, username=None):
         # load articles in from db and github, stuff them in an array
-        articles = models.Article.get_all()
-        blogposts = []
+        articles = models.Article.get_blog_posts(1)
+        logging.info("value is: %s" % articles)
 
         # loop through all articles
+        blogposts = []
         for article in articles:
             # if there's content on Github to serve
             raw_gist_content = github.get_raw_gist_content(article.gist_id)
@@ -191,12 +192,29 @@ class HomeRequestHandler(BaseHandler):
                     'article_owner': owner_info.username,
                     'article_host': self.request.host,
                 }
-                if article.article_type == 'post' and article.public and not article.draft:
-                    blogposts.append(entry)
+                
+                blogposts.append(entry)
+
+        # show other recent articles in sidebar
+        articles = models.Article.get_blog_posts(5)
+        archives = []
+        for article in articles:
+            logging.info("value is: %s" % article)
+            owner_info = models.User.get_by_id(article.owner.id())
+            article_title = bleach.clean(article.title)
+            entry = {
+                'article_title': article_title,
+                'article_type': article.article_type, 
+                'article_slug': article.slug,
+                'article_owner': owner_info.username,
+                'article_host': self.request.host,
+            }
+            logging.info("value is: %s" % entry)
+            archives.append(entry)
 
         # see if we have any blog posts - unlikely we don't
         if len(blogposts) > 0:
-            params = {'blogpost': blogposts[0], 'archives': blogposts} 
+            params = {'blogpost': blogposts[0], 'archives': archives} 
         else:
             params = {'blogpost': {} }
 

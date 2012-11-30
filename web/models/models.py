@@ -154,13 +154,17 @@ class Article(ndb.Model):
         # logging.info("value is: %s" % gist)
         return gist
 
-
     @classmethod
     def get_all(cls):
-        article_query = cls.query().filter().order(-Article.created)
+        article_query = cls.query().filter().order(-cls.created)
         gists = article_query.fetch()
         return gists
 
+    @classmethod
+    def get_blog_posts(cls, num_articles=1):
+        article_query = cls.query().filter(cls.article_type == 'post', cls.public == True, cls.draft == False).order(-cls.created)
+        gists = article_query.fetch(limit=num_articles)
+        return gists
 
     @classmethod
     def get_by_user(cls, user):
