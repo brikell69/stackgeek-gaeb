@@ -24,7 +24,8 @@ _routes = [
     # redirects for a bad slug we had - remove 1/1/13
     RedirectRoute('/blog/kordless/posts/increase-the-size-of-devstack-s-volumes', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
     RedirectRoute('/blog/kordless/post/increase-the-size-of-devstack-s-volumes', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),
-    
+    RedirectRoute('/blog/archives/2012-1/02', redirect_to_name='blog'),
+
     # old format for blog posts - leave in place
     RedirectRoute('/2012/02/21/taking-openstack-for-a-spin/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'taking-openstack-for-a-spin'}),
     RedirectRoute('/2012/04/28/increase-the-size-of-devstacks-volumes/', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),

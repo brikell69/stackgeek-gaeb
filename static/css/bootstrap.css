@@ -3973,6 +3973,7 @@ a.badge:hover {
 .navbar-inverse .navbar-search .search-query:hover:-ms-input-placeholder { color: #eeeeee }
 .navbar-inverse .navbar-search .search-query::-webkit-input-placeholder,
 .navbar-inverse .navbar-search .search-query:hover::-webkit-input-placeholder { color: #eeeeee }
+/*
 @media (max-width:979px) { 
   .navbar .nav-collapse .nav li>a:hover {
       background-color: #558bc4;
@@ -3987,6 +3988,7 @@ a.badge:hover {
   .navbar-inverse .nav-collapse .nav li>a:hover { background-color: #558bc4 !important }
   .navbar-inverse .nav-collapse .nav-header { color: #eeeeee }
 }
+*/
 div.subnav .nav>li>a { color: #2d2d2d }
 div.subnav .nav>li>a:hover { color: #558bc4 }
 div.subnav .nav>li.active>a { color: #2d2d2d }

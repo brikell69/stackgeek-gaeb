@@ -195,11 +195,14 @@ class BlogArticleSlugHandler(BaseHandler):
     def get(self, username='kordless', article_type='guides', slug = None):
         # look up our article
         user = models.User.get_by_username(username)
-        article = models.Article.get_by_user_and_slug(user.key, slug)
         
-        if not article:
+        try:
+            article = models.Article.get_by_user_and_slug(user.key, slug)
+            if not article:
+                return self.render_template('errors/default_error.html')
+        except:
             return self.render_template('errors/default_error.html')
-
+            
         raw_gist_content = github.get_raw_gist_content(article.gist_id)
 
         # if there's content on Github to serve

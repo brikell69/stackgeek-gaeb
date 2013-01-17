@@ -298,7 +298,6 @@ class CallbackSocialLoginHandler(BaseHandler):
                     self.redirect_to('home')
                 else:
                     # Social user does not exists. Need show login and registration forms!
-                    github_helper.save_association_data(user_data)
                     message = _('This Github account is not associated with a StackGeek account. '
                                 'Please sign in or create a StackGeek account before continuing.')
                     self.add_message(message, 'warning')
