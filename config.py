@@ -1,8 +1,8 @@
 import os, logging
 
 # application details
-app_name = "StackGeek"
-site_bio = "A site for infrastructure nuts.  And dubstep."
+app_name = "xxxxxxxxxxxxxxxx"
+site_bio = "A site for xxxxxxxxxxxxxxxx nuts.  And xxxxxxxxxxxxxxxx."
 
 # template configuration
 webapp2_config = {}
@@ -66,7 +66,7 @@ if os.environ['SERVER_SOFTWARE'].startswith('Dev'):
 else:
 	# going production level
 	github_server = 'github.com'
-	github_redirect_uri = 'http://stackgeek.appspot.com/social_login/github/complete'
+	github_redirect_uri = 'http://xxxxxxxxxxxxxxxx.appspot.com/social_login/github/complete'
 	github_client_id = 'xxxxxxxxxxxxxxxx'
 	github_client_secret = 'xxxxxxxxxxxxxxxx'
 
@@ -76,11 +76,11 @@ gist_markdown_name = 'stackgeek.md'
 memcache_expire_time = 604800
 
 # gravatar holder image
-gravatar_url_stub = "http://s.gravatar.com/avatar/12ef6ddacf7ee65d6048ed286cd3f024"
+gravatar_url_stub = "http://s.gravatar.com/avatar/xxxxxxxxxxxxxxxx"
 
 # get your own recaptcha keys by registering at www.google.com/recaptcha
 captcha_public_key = "xxxxxxxxxxxxxxxx"
-captcha_private_key = "xxxxxxxxxxxxxxxx-7986qVDDdXmPoP"
+captcha_private_key = "xxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxx"
 
 # tracking shizzle
 google_analytics_code = "UA-xxxxxxxxxxxxxxxx-1"
