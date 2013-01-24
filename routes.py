@@ -20,6 +20,7 @@ _routes = [
 
     # our breadwinner - don't delete
     RedirectRoute('/blog/kordless/guides/gettingstarted.html', redirect_to_name='guides-article', defaults={'slug': 'gettingstarted.html'}),
+    RedirectRoute('/blog/kordless/guide/gettingstarted.html', redirect_to_name='guides-article', defaults={'slug': 'gettingstarted.html'}),
 
     # redirects for a bad slug we had - remove 1/1/13
     RedirectRoute('/blog/kordless/posts/increase-the-size-of-devstack-s-volumes', redirect_to_name='blog-article-slug', defaults={'username': 'kordless', 'article_type': 'post', 'slug': 'increase-the-size-of-devstacks-volumes'}),

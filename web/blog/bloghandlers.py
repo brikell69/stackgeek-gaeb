@@ -244,10 +244,11 @@ class BlogArticleSlugHandler(BaseHandler):
                 'article_title': article_title,
                 'article_html': article_html, 
                 'article_slug': article.slug,
+                'article_type': article.article_type,
                 'article_owner': owner_info.username,
                 'article_host': self.request.host,
             }
-            # pack and stuff into template
+            # pack and stuff into template - duplicate on article_type TODO
             params = {
                 'name': name,
                 'github_username': github_username, 
