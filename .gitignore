@@ -34,6 +34,7 @@ pip-log.txt
 .project
 .settings*
 
+# protect the config file
 config.py
 
 config.py

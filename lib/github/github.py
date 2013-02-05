@@ -129,7 +129,7 @@ def get_raw_gist_content(gist_id):
         return markdown
     else:
         logging.info("cache miss for %s" % gist_id)
-        try:
+        if True:
             # go fetch the current raw url from the gist_id
             http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
             headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
@@ -144,10 +144,9 @@ def get_raw_gist_content(gist_id):
                 logging.info("memcache add of content from gist %s failed." % gist_id)
 
             return markdown
-        except:
+        if False:
             logging.info("got an exception while talking to github")
             return False
-
 
 def fork_gist(access_token, gist_id):
     try:
