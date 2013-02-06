@@ -139,6 +139,10 @@ def get_gist_content(gist_id):
             http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
             headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
             
+            if headers['status'] == '404':
+                logging.info("looked for gist ID %s but didn't find it.  404 bitches.")
+                return False
+
             # strip bad UTF-8 stuff if it exists (like in a gist with a .png)
             content = content.decode('utf-8', 'replace')
             gist = simplejson.loads(content)

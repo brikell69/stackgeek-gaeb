@@ -1,5 +1,5 @@
 application: stackgeek
-version: 0-7-0
+version: 0-7-2
 runtime: python27
 api_version: 1
 threadsafe: true
