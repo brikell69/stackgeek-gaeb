@@ -169,11 +169,11 @@ class HomeRequestHandler(BaseHandler):
         blogposts = []
         for article in articles:
             # if there's content on Github to serve
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            raw_gist_content = github.get_gist_content(article.gist_id)
 
             # if github gist exists for the entry
             if raw_gist_content:
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(raw_gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 
                 # created and by whom

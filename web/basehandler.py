@@ -193,6 +193,16 @@ class BaseHandler(webapp2.RequestHandler):
         return  None
 
     @webapp2.cached_property
+    def is_admin(self):
+        if self.user:
+            try:
+                user_info = models.User.get_by_id(long(self.user_id))
+                return user_info.admin
+            except AttributeError, e:
+                logging.error(e)
+        return False
+        
+    @webapp2.cached_property
     def email(self):
         if self.user:
             try:
@@ -315,7 +325,9 @@ class BaseHandler(webapp2.RequestHandler):
             'provider_uris': self.provider_uris,
             'provider_info': self.provider_info,
             'enable_federated_login': config.enable_federated_login,
-            'base_layout': self.get_base_layout
+            'base_layout': self.get_base_layout,
+            'admin_interface_url': config.admin_interface_url,
+            'admin': self.is_admin,
             })
         kwargs.update(self.auth_config)
         if hasattr(self, 'form'):

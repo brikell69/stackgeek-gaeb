@@ -36,7 +36,8 @@ import html5lib
 # social login
 from lib.github import github
 from lib.twitter import twitter
-from lib.markdown import markdown
+
+
 
 ##################
 # Public Methods #
@@ -52,13 +53,13 @@ class PublicBlogHandler(BaseHandler):
         for article in articles:
             # if there's content on Github to serve
             try:
-                raw_gist_content = github.get_raw_gist_content(article.gist_id)
+                gist_content = github.get_gist_content(article.gist_id)
             except:
                 continue
 
-            if raw_gist_content:
+            if gist_content:
                 # sanitize javascript
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
 
@@ -98,14 +99,13 @@ class PublicGuideHandler(BaseHandler):
         # loop through all articles
         for article in articles:
             # if there's content on Github to serve
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            gist_content = github.get_gist_content(article.gist_id)
 
-            if raw_gist_content:
+            if gist_content:
                 # sanitize javascript
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
-                article_host = self.request.host
 
                 # created and by whom
                 created = article.created.strftime(date_format)
@@ -145,13 +145,13 @@ class PublicBlogRSSHandler(BaseHandler):
 
         entries = []
         for article in articles[0:10]:
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            gist_content = github.get_gist_content(article.gist_id)
 
-            if raw_gist_content:
+            if gist_content:
                 owner_info = models.User.get_by_id(article.owner.id())
                 
                 # sanitize javascript
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
 
@@ -203,10 +203,10 @@ class BlogArticleSlugHandler(BaseHandler):
         except:
             return self.render_template('errors/default_error.html')
             
-        raw_gist_content = github.get_raw_gist_content(article.gist_id)
+        gist_content = github.get_gist_content(article.gist_id)
 
         # if there's content on Github to serve
-        if raw_gist_content:
+        if gist_content:
             owner_info = models.User.get_by_id(article.owner.id())
             
             # set nav menu pill
@@ -231,10 +231,9 @@ class BlogArticleSlugHandler(BaseHandler):
             date_format = "%a, %d %b %Y"
 
             # sanitize javascript
-            article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+            article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
             article_title = bleach.clean(article.title)
             article_summary = bleach.clean(article.summary)
-            article_host = self.request.host
 
             # serve page if we have contents
             created = article.created.strftime(date_format)
@@ -311,14 +310,13 @@ class BlogUserHandler(BaseHandler):
         # loop through all articles and build a list of both posts and articles
         for article in articles:
             # if there's content on Github to serve
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            gist_content = github.get_gist_content(article.gist_id)
             
-            if raw_gist_content:
+            if gist_content:
                 # sanitize javascript            
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
-                article_host = self.request.host
 
                 created = article.created.strftime(date_format)
                 entry = {
@@ -335,7 +333,7 @@ class BlogUserHandler(BaseHandler):
                 
                 # we switch between adding to the two lists here
                 # will need video handling eventually
-                if raw_gist_content and not article.draft:
+                if gist_content and not article.draft:
                     if article.article_type == 'post':
                         blogposts.append(entry)
                     else:
@@ -387,11 +385,11 @@ class BlogUserRSSHandler(BaseHandler):
 
         for article in articles[0:10]:
             # if there's content on Github to serve
-            raw_gist_content = github.get_raw_gist_content(article.gist_id)
+            gist_content = github.get_gist_content(article.gist_id)
             
-            if raw_gist_content:
+            if gist_content:
             # sanitize javascript
-                article_html = bleach.clean(markdown.markdown(raw_gist_content), config.bleach_tags, config.bleach_attributes)
+                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
 
@@ -407,7 +405,7 @@ class BlogUserRSSHandler(BaseHandler):
                     'host': self.request.host,
                 }
 
-                if raw_gist_content and not article.draft:
+                if gist_content and not article.draft:
                     entries.append(entry)
 
         date_format = "%a, %d %b %Y %H:%M:%S GMT"
@@ -637,7 +635,7 @@ class BlogClearCacheHandler(BaseHandler):
         user_info = models.User.get_by_id(long(self.user_id))
         article = models.Article.get_by_id(long(article_id))
 
-        if article.owner == user_info.key and github.flush_raw_gist_content(article.gist_id):
+        if article.owner == user_info.key and github.flush_gist_content(article.gist_id):
             message = 'Article was flushed from cache.'
         else:
             message = 'Something went wrong flushing from cache!'
@@ -725,7 +723,7 @@ class BlogBuildListHandler(BaseHandler):
                 article.put()
 
                 # flush memcache copy just in case we had it
-                github.flush_raw_gist_content(article.gist_id)
+                github.flush_gist_content(article.gist_id)
                                 
             # use the channel to tell the browser we are done
             channel_token = self.request.get('channel_token')

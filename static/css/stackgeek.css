@@ -196,7 +196,7 @@ p {
 }
 
 .blog pre code, .blog code, .blog pre{
-	font-size: 12px;
+	font-size: 13px;
 	font-family: monospace;
 }
 
@@ -212,28 +212,28 @@ h2.recent {
 	border-top: 1px solid #CCC;
 }
 
-h2.post a{
+h1.post a{
 	color: black;
 	font-weight: bold;
 	text-decoration: none;
 	font-size: 27px;
 }
 
-h2.postdetail {
+h1.postdetail {
 	font-weight: bold;
 	font-size: 30px;
 	margin: 0 0 10px; !important;
 }
 
-h2.postdetail a{
+h1.postdetail a{
 	text-decoration: none;
 	color: #444;
 }
 
-h2.postdetail a:hover{
+h1.postdetail a:hover{
 	text-decoration: underline;
 }
-h2.post a:hover{
+h1.post a:hover{
 	text-decoration: underline;
 }
 
@@ -244,7 +244,7 @@ div.recent_posts {
 	border-bottom: 1px solid #DDD;
 	font-weight: bold;
 	font-size: 20px;
-	margin: 0 0 10px 0; !important;
+	margin: 0 0 10px 0 !important;
 }
 .recent_posts p {
 	margin: 0px;
@@ -255,15 +255,46 @@ p.recent_author {
 	font-size: 10px !important;
 }
 
+.apost h1 {
+	font-size: 28px;
+	margin: 20px 0 10px;
+	padding: 0;
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+}
+
+.section h1 {
+	font-size: 24px;
+	margin: 20px 0 10px;
+	padding: 0;
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+}
+
+.apost h2 {
+	border-bottom: 1px solid #DDD;
+	font-size: 20px;
+	margin: 20px 0 10px;
+	padding: 0;
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+}
+
 .apost h3 {
 	border-bottom: 1px solid #DDD;
 	font-weight: bold;
 	font-size: 20px;
-	margin: 15px 0 8px 0; !important;
+	margin: 15px 0 8px 0 !important;
 }
-
+.apost th {
+	padding: 6px 13px;
+}
+.apost td {
+	padding: 6px 13px;
+}
 .apost {
 	margin-bottom: 30px !important;
+	margin-top: -20px;
 	line-height: 17pt;
 	font-size: 16px;
 }
@@ -277,6 +308,8 @@ img.gist-fork {
 }
 .date_social {
 	line-height: 14pt;
+	height: 20px;
+	margin-top: -6px;
 }
 .date span{
 	text-shadow: none;

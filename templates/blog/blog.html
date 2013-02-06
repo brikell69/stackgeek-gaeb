@@ -27,7 +27,7 @@
 	<div class="span9">
 	{% for item in blogposts %}
 		<div class="apost">
-			<h2 class="postdetail"><a href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}">{{ item.article_title }}</a></h2>
+			<h1 class="postdetail"><a href="/blog/{{ item.article_owner }}/{{ item.article_type }}/{{ item.article_slug }}">{{ item.article_title }}</a></h1>
 			<div class="date_social">
     			<div class="date"><span class="label label-important">{{ item.created }}</span></div>
 				{% if user_id %}

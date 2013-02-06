@@ -22,6 +22,10 @@ import lib.github.oauth_client as oauth2
 from google.appengine.api import memcache
 import logging
 
+# mark up, down, left, right
+from lib.markdown import markdown
+from lib.docutils.core import publish_parts
+
 # Github OAuth Implementation
 class GithubAuth(object):
     
@@ -123,27 +127,41 @@ def get_user_gists(github_user, access_token):
         # TODO do somthing if getting the gists fails
 
 
-def get_raw_gist_content(gist_id):
-    markdown = memcache.get('%s:markdown' % gist_id)
-    if markdown is not None:
-        return markdown
+# fetch either .md or .rst files from github and render into html, caching as needed
+def get_gist_content(gist_id):
+    content = memcache.get('%s:content' % gist_id)
+    if content is not None:
+        return content
     else:
         logging.info("cache miss for %s" % gist_id)
         if True:
-            # go fetch the current raw url from the gist_id
+            # go fetch the gist using the gist_id
             http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
             headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
+            
+            # strip bad UTF-8 stuff if it exists (like in a gist with a .png)
+            content = content.decode('utf-8', 'replace')
             gist = simplejson.loads(content)
 
-            gist_markdown_url = gist['files'][config.gist_markdown_name]['raw_url']
+            # see if we have .md or .rst file matching our filenames in config
+            if config.gist_markdown_name in gist['files']:
+                gist_content_url = gist['files'][config.gist_markdown_name]['raw_url']
+                headers, content = http.request(gist_content_url, method='GET', headers=None)
+                gist_html = markdown.markdown(content)
+            elif config.gist_restructuredtext_name in gist['files']:
+                gist_content_url = gist['files'][config.gist_restructuredtext_name]['raw_url']
+                headers, content = http.request(gist_content_url, method='GET', headers=None)
+                parts = publish_parts(source=content, writer_name='html4css1', settings_overrides={'title': '', 'report_level': 'quiet', '_disable_config': True})
+                gist_html = parts['html_body'].replace('class="docinfo"', 'class="table table-striped"').replace('class="docutils', 'class="table table-striped table-bordered')
+            else:
+                logging.info("not finding a valid markdown file to display for content")
+                return False
             
-            # use that raw url to load the content and stuff it into memcache for a while
-            headers, markdown = http.request(gist_markdown_url, method='GET', headers=None)
-            
-            if not memcache.add('%s:markdown' % gist_id, markdown, config.memcache_expire_time):
+            if not memcache.add('%s:content' % gist_id, gist_html, config.memcache_expire_time):
                 logging.info("memcache add of content from gist %s failed." % gist_id)
 
-            return markdown
+            return gist_html
+
         if False:
             logging.info("got an exception while talking to github")
             return False
@@ -180,8 +198,8 @@ def fork_gist(access_token, gist_id):
         return False
 
 
-def flush_raw_gist_content(gist_id):
-    if memcache.delete('%s:markdown' % gist_id):
+def flush_gist_content(gist_id):
+    if memcache.delete('%s:content' % gist_id):
         logging.info("flushed cache!")
         return True
     else:
