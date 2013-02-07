@@ -59,7 +59,7 @@
                     {{ macros.g_plus_widget("http://%s/blog/%s/%s/%s"%(blogpost.article_host, blogpost.article_owner, blogpost.article_type, blogpost.article_slug)) }}
                     {{ macros.tweet_widget("http://%s/blog/%s/%s/%s"%(blogpost.article_host, blogpost.article_owner, blogpost.article_type, blogpost.article_slug), blogpost.article_summary) }}
                   </div>
-                  <p>by <a href="/blog/{{ blogpost.article_owner }}">{{ blogpost.article_owner }}</a>
+                  <p>by <a href="/blog/{{ blogpost.article_owner }}" rel="author">{{ blogpost.article_owner }}</a>
                   {{blogpost.article_html}}
                   <a class="btn" href="/blog/{{ blogpost.article_owner }}/post/{{ blogpost.article_slug }}#disqus_thread">0 Comments</a>
                   <a class="btn" href="/blog/">View More Posts</a>

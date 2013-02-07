@@ -556,6 +556,7 @@ class EditProfileHandler(BaseHandler):
             self.form.country.data = user_info.country
             self.form.bio.data = user_info.bio
             self.form.gravatar_url.data = user_info.gravatar_url
+            self.form.google_plus_profile.data = user_info.google_plus_profile
             self.form.twitter_widget_id.data = user_info.twitter_widget_id
             providers_info = user_info.get_social_providers_info()
             params['used_providers'] = providers_info['used']
@@ -577,6 +578,7 @@ class EditProfileHandler(BaseHandler):
         bio = self.form.bio.data.strip()
         twitter_widget_id = self.form.twitter_widget_id.data.strip()
         gravatar_url = self.form.gravatar_url.data.strip()
+        google_plus_profile = self.form.google_plus_profile.data.strip()
         
         try:
             user_info = models.User.get_by_id(long(self.user_id))
@@ -612,6 +614,7 @@ class EditProfileHandler(BaseHandler):
                 user_info.bio=bio
                 user_info.twitter_widget_id=twitter_widget_id
                 user_info.gravatar_url=gravatar_url
+                user_info.google_plus_profile=google_plus_profile
                 user_info.put()
                 message+= " " + _('Thanks, your settings have been saved.  You may now dance.')
                 self.add_message(message, 'success')

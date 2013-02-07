@@ -22,6 +22,7 @@ class User(User):
     bio = ndb.StringProperty()
     password = ndb.StringProperty()
     country = ndb.StringProperty()
+    google_plus_profile = ndb.StringProperty()
     gravatar_url = ndb.StringProperty()
     twitter_widget_id = ndb.StringProperty()
     activated = ndb.BooleanProperty(default=False)

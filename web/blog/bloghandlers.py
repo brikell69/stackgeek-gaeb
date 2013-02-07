@@ -345,6 +345,7 @@ class BlogUserHandler(BaseHandler):
             'name': name,
             'blog_username': username,
             'owner_github_username': owner_github_username,
+            'google_plus_profile': owner_info.google_plus_profile,
             'gravatar_url': gravatar_url, 
             'twitter_widget_id': owner_info.twitter_widget_id, 
             'blogposts': blogposts, 

@@ -87,6 +87,7 @@ class EditProfileForm(UserMixin):
     last_name = fields.TextField(_('Last_Name'), [validators.Length(max=FIELD_MAXLENGTH)])
     company = fields.TextField(_('Company'))
     bio = fields.TextAreaField(_('Bio'))
+    google_plus_profile = fields.TextField(_('Google+ Profile URL'))
     gravatar_url = fields.TextField(_('Gravatar URL'))
     twitter_widget_id = fields.TextField(_('Twitter Widget ID'))
     country = fields.SelectField(_('Country'), choices=utils.COUNTRIES)   
