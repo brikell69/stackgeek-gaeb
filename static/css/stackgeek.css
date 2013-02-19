@@ -33,15 +33,14 @@ img#cloud2 { position: absolute; top:  -80px; left: 300px; z-index: 50;}
 img#cloud3 { position: absolute; top:  -90px; left: -300px; z-index: 10;}
 img#cloud4 { position: absolute; top:  -10px; left: 300px; z-index: 50;}
 
-div.amazon_books img {
-	margin: 4px;
-}
-div.amazon_block h4 {
+div.ad_block {
 	margin-top: 20px;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #DDD;
 }
 
+img.rss_icon {
+	float: right;
+	margin-top: 8px;
+}
 .isotope-item {
   z-index: 2;
 }

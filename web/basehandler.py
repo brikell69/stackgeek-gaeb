@@ -310,6 +310,9 @@ class BaseHandler(webapp2.RequestHandler):
         kwargs.update({
             'google_analytics_code' : config.google_analytics_code,
             'app_name': config.app_name,
+            'app_description': config.app_description,
+            'app_admin': config.app_admin,
+            'app_feedburner_slug': config.app_feedburner_slug,
             'user_id': self.user_id,
             'username': self.username,
             'email': self.email,

@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+>
 {% set date_format = "%a, %d %b %Y %H:%M:%S GMT" %}
 <channel>
 <title>{{ blog_title|escape }}</title>
-<description>{{ bio }}</description>
-<language>en</language>
-<copyright>{{ author }}</copyright>
+<description>{{ app_description }}</description>
+<language>en-US</language>
+<copyright>Copyright 2013, {{ app_admin }}</copyright>
 <pubDate>{{ blog_last_updated }}</pubDate>
-<link>http://{{ host }}/blog/{{ feed_username }}</link>
+<link>http://{{ site_host }}/blog/</link>
 <ttl>30</ttl>
-<atom:link rel="self" href="{{ host }}/blog/{{ user_slug }}feed/rss/" title="{{ blog_title|escape }}" type="application/rss+xml"/>
+<sy:updatePeriod>hourly</sy:updatePeriod>
+<sy:updateFrequency>1</sy:updateFrequency>
+<atom:link rel="self" href="http://{{ site_host }}/blog/feed/rss/" title="{{ blog_title|escape }}" type="application/rss+xml"/>
 {% for entry in entries %}
 <item>
 <title>{{ entry.title|escape }}</title>
-<description>{{ entry.summary }}</description>
-<link>http://{{ host }}/blog/{{ user_slug }}/{{ entry.article_path }}</link>
-<guid isPermaLink="true">http://www.stackgeek.com/blog/{{ user_slug }}{{ entry.article_path }}</guid>
+<link>http://{{ site_host }}/blog/{{ entry.author_username }}/{{ entry.article_type }}s/{{ entry.slug }}</link>
+<guid isPermaLink="true">http://{{ site_host }}/blog/{{ entry.author_username }}/{{ entry.article_type }}s/{{ entry.slug }}</guid>
 <pubDate>{{ entry.created.strftime(date_format) }}</pubDate>
-<source url="{{ host }}/{{ user_slug }}">http://{{ host }}/{{ user_slug }}</source>
+<description>{{ entry.summary }}</description>
+<author>{{ entry.author_email }}</author>
+<content:encoded>
+	<![CDATA[{{ entry.html }}]]>
+</content:encoded>
 </item>
-{{ entry.post_html }}
 {% endfor %}
 </channel>
 </rss>

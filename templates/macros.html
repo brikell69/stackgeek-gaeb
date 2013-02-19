@@ -79,6 +79,19 @@
     </script>
 {%- endmacro %}
 
+<!-- google ads widget -->
+{% macro google_ads() -%}
+<script type="text/javascript"><!--
+    google_ad_client = "ca-pub-6603735508973311";
+    /* StackGeek */
+    google_ad_slot = "6166710438";
+    google_ad_width = 160;
+    google_ad_height = 600;
+    //-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+{%- endmacro %}
+
 <!-- google plus widget -->
 {% macro hn_widget(data_url, article_title) -%}
 <a href="http://news.ycombinator.com/submit" class="hn-share-button" data-title="{{article_title}}" data-url="{{data_url}}">Vote on HN</a>

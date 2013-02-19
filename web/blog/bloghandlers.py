@@ -135,40 +135,46 @@ class PublicGuideHandler(BaseHandler):
 
 # TODO: needs to be fixed to guarantee 10 items get spit out
 class PublicBlogRSSHandler(BaseHandler):
-    def get(self):
+   def get(self):
         # load articles in from db and github, stuff them in an array
         date_format = "%a, %d %b %Y"
-        articles = models.Article.get_all()
-        blog_title = "StackGeek Blog"
+
+        blog_title = "The %s Blog" % config.app_name
         epoch_start = datetime.datetime(1970, 1, 1)
         blog_last_updated = epoch_start
 
         entries = []
+        
+        # fetch our articles
+        articles = models.Article.get_all()
+        
         for article in articles[0:10]:
             gist_content = github.get_gist_content(article.gist_id)
 
             if gist_content:
-                owner_info = models.User.get_by_id(article.owner.id())
-                
-                # sanitize javascript
+                # sanitize
                 article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
                 article_title = bleach.clean(article.title)
                 article_summary = bleach.clean(article.summary)
+
+                # look up owner
+                owner_info = models.User.get_by_id(article.owner.id())
 
                 if article.updated > blog_last_updated:
                     blog_last_updated = article.updated
                 entry = {
                     'slug': article.slug,
-                    'user_slug': "%s/" % owner_info.username,
-                    'created': article.created, 
-                    'updated': article.updated, 
+                    'article_type': article.article_type,
+                    'created': article.created,
+                    'author_email': owner_info.email,
+                    'author_username': owner_info.username,
+                    'updated': article.updated,
                     'title': article_title, 
                     'summary': article_summary, 
                     'html': article_html,
-                    'article_host': self.request.host,
                 }
 
-                if not article.draft and article.public:
+                if not article.draft:
                     entries.append(entry)
 
         # didn't get any matches in our loop
@@ -181,9 +187,7 @@ class PublicBlogRSSHandler(BaseHandler):
         params = {
             'blog_title': blog_title, 
             'blog_last_updated': blog_last_updated,
-            'author': 'StackGeek and Various Site Contributers',
-            'slug': '',
-            'bio': config.site_bio, 
+            'site_host': self.request.host,
             'entries': entries,
         }
         
@@ -280,6 +284,8 @@ class BlogUserHandler(BaseHandler):
 
         # find the browsed user's github username (used for follow button)
         owner_social_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'github')
+        owner_twitter_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'twitter')
+        logging.info(owner_twitter_user)
 
         # load github usernames
         try:
@@ -346,83 +352,13 @@ class BlogUserHandler(BaseHandler):
             'blog_username': username,
             'owner_github_username': owner_github_username,
             'google_plus_profile': owner_info.google_plus_profile,
-            'gravatar_url': gravatar_url, 
+            'gravatar_url': gravatar_url,
+            'twitter_username': 'kordless',
             'twitter_widget_id': owner_info.twitter_widget_id, 
             'blogposts': blogposts, 
             'guides': guides,
         }
         return self.render_template('blog/blog_user.html', **params)
-
-
-# TODO: needs to be fixed to guarantee 10 items get spit out
-class BlogUserRSSHandler(BaseHandler):
-    def get(self, username = None):
-        owner_info = models.User.get_by_id(long(self.user_id))
-        
-        # load name
-        if not owner_info.name:
-            name = bleach.clean(owner_info.username)
-        else:
-            name = "%s %s" % (bleach.clean(owner_info.name), bleach.clean(owner_info.last_name))
-        blog_title = "StackGeek Blog - %s" % name
-
-        # load bio
-        if not owner_info.bio:
-            bio = "User has not completed their bio."
-        else:
-            bio = bleach.clean(owner_info.bio)
-        
-        # load avatar
-        if not owner_info.gravatar_url:
-            gravatar_url = config.gravatar_url_stub
-        else:
-            gravatar_url = owner_info.gravatar_url
-
-        # load 10 articles in from db and github, stuff them in an array
-        articles = models.Article.get_by_user(owner_info.key)
-        entries = []
-        epoch_start = datetime.datetime(1970, 1, 1)
-        blog_last_updated = epoch_start
-
-        for article in articles[0:10]:
-            # if there's content on Github to serve
-            gist_content = github.get_gist_content(article.gist_id)
-            
-            if gist_content:
-            # sanitize javascript
-                article_html = bleach.clean(gist_content, config.bleach_tags, config.bleach_attributes)
-                article_title = bleach.clean(article.title)
-                article_summary = bleach.clean(article.summary)
-
-                if article.updated > blog_last_updated:
-                    blog_last_updated = article.updated
-                entry = {
-                    'article_path': '#', 
-                    'created': article.created, 
-                    'updated': article.updated, 
-                    'title': article_title, 
-                    'summary': article_summary, 
-                    'html': article_html,
-                    'host': self.request.host,
-                }
-
-                if gist_content and not article.draft:
-                    entries.append(entry)
-
-        date_format = "%a, %d %b %Y %H:%M:%S GMT"
-        if blog_last_updated == epoch_start:
-            blog_last_updated = datetime.datetime.utcnow().strftime(date_format) 
-        else:
-            blog_last_updated = blog_last_updated.strftime(date_format)
-
-        params = {
-            'blog_title': blog_title, 
-            'blog_last_updated': blog_last_updated, 
-            'bio': owner_info.bio, 
-            'entries': entries,
-        }
-        self.response.headers['Content-Type'] = 'application/atom+xml' 
-        return self.render_template('blog/feed.xml', **params)
 
 
 ##################
@@ -432,6 +368,10 @@ class BlogUserRSSHandler(BaseHandler):
 class BlogArticleActionsHandler(BaseHandler):
     @user_required
     def get(self, username=None, article_id = None):
+
+        if not isinstance(article_id, (int, long)):
+            return
+
         # pull the github token out of the social user db and then fork it
         user_info = models.User.get_by_id(long(self.user_id))
         social_user = models.SocialUser.get_by_user_and_provider(user_info.key, 'github')

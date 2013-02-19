@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block rssfeed %}
-	<link rel="alternate" type="application/rss+xml" title="Feed for {{ name }} on StackGeek.com" href="http://www.stackgeek.com/blog/{{ blog_username }}/feed/rss/" />
+  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+  <link rel="alternate" type="text/xml" title="RSS .92" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
 {% endblock %}
 
 {% block extra_nav %}
@@ -36,7 +38,7 @@
   <div class="row blog">
     {% if is_mobile %}
     <div class="span3">
-      <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{blog_username}}" data-widget-id="{{twitter_widget_id}}">Tweets by @{{blog_username}}</a>
+      <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{twitter_username}}" data-widget-id="{{twitter_widget_id}}">Tweets by @{{twitter_username}}</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
     {% endif %}
@@ -85,8 +87,11 @@
     </div>
     {% if not is_mobile %}
     <div class="span3">
-		  <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{blog_username}}" data-widget-id="{{twitter_widget_id}}">Tweets by @{{blog_username}}</a>
+		  <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{twitter_username}}" data-widget-id="{{twitter_widget_id}}">Tweets by @{{twitter_username}}</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <div class="ad_block">
+        {{ macros.google_ads() }}
+      </div>
     </div>
     {% endif %}
   </div>

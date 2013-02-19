@@ -76,7 +76,6 @@ _routes = [
     RedirectRoute('/blog/<username>/<article_type>/<slug>', bloghandlers.BlogArticleSlugHandler, name='blog-article-slug', strict_slash=True),
     RedirectRoute('/blog/<username>/<article_id>/', bloghandlers.BlogArticleActionsHandler, name='blog-article-actions', strict_slash=True),
     RedirectRoute('/blog/<username>/', bloghandlers.BlogUserHandler, name='blog-user', strict_slash=True),
-    RedirectRoute('/blog/<username>/feed/rss/', bloghandlers.BlogUserRSSHandler, name='blog-user-rss', strict_slash=True),
     RedirectRoute('/guides/', bloghandlers.PublicGuideHandler, name='guides', strict_slash=True),
 
     # throwback URLs for old stackgeek.com site - do not include in gae-boilerplate changes

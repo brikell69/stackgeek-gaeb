@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block rssfeed %}
-	<link rel="alternate" type="application/rss+xml" title="Feed for {{ username }} on StackGeek.com" href="http://www.stackgeek.com/blog/{{ username }}/feed/rss/" />
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+	<link rel="alternate" type="text/xml" title="RSS .92" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+	<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
 {% endblock %}
 
 {% block extra_nav %}
@@ -47,7 +49,7 @@
 	{% if not is_mobile %}
 	<div class="span3">
         <div class="recent_posts">
-          <h3>Recent Posts</h3>
+          <h3>Recent Posts<a href="http://feeds.feedburner.com/{{ app_feedburner_slug }}"><img class="rss_icon" src="/img/glyphicons_397_rss.png"/></a></h3>
           {% for item in blogposts %}
             <p><a href="{{ 'http://%s/blog/%s/%s/%s' % (item.article_host, item.article_owner, item.article_type, item.article_slug) }}">{{ item.article_title }}</a></p>
             <p class="recent_author">by <a href="#">{{ item.article_owner }}</a>
@@ -55,6 +57,9 @@
         </div>		
 		<a class="twitter-timeline" href="https://twitter.com/stackgeek" data-widget-id="264213994309558272">Tweets by @stackgeek</a>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		<div class="ad_block">
+        	{{ macros.google_ads() }}
+      	</div>
 	</div>
 	{% endif %}
 </div>

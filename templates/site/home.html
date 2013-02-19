@@ -5,6 +5,12 @@
   {% trans %}Home{% endtrans %}
 {% endblock %}
 
+{% block rssfeed %}
+  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+  <link rel="alternate" type="text/xml" title="RSS .92" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+{% endblock %}
+
 {% block header_title_lead %}{% endblock %}
 
       {% block hero %}
@@ -89,7 +95,7 @@
           {% if not is_mobile %}
           <div class="span3">
             <div class="recent_posts">
-              <h3>Recent Posts</h3>
+              <h3>Recent Posts<a href="http://feeds.feedburner.com/{{ app_feedburner_slug }}"><img class="rss_icon" src="/img/glyphicons_397_rss.png"/></a></h3>
               {% for item in archives %}
                 <p><a href="{{ 'http://%s/blog/%s/%s/%s' % (item.article_host, item.article_owner, item.article_type, item.article_slug) }}">{{ item.article_title }}</a></p>
                 <p class="recent_author">by <a href="/blog/{{ item.article_owner }}">{{ item.article_owner }}</a>

@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block rssfeed %}
-	<link rel="alternate" type="application/rss+xml" title="Feed for {{ username }} on StackGeek.com" href="http://www.stackgeek.com/blog/{{ username }}/feed/rss/" />
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+	<link rel="alternate" type="text/xml" title="RSS .92" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
+	<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="http://feeds.feedburner.com/{{ app_feedburner_slug }}/" />
 {% endblock %}
 
 {% block extra_nav %}
