@@ -30,8 +30,8 @@
     <!-- Styles and Whatnot -->
     <link rel="shortcut icon" href="/favicon.ico">
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap-responsive.css">
     <link rel="stylesheet" href="/css/bootstrap-toggle.css">
     <link rel="stylesheet" href="/css/stackgeek.css?version=067">
     
@@ -71,7 +71,7 @@
                         <li id="user" class="dropdown">
                             <button class="btn btn-inverse" data-toggle="dropdown">@{{ username }} <b class="caret"></b></button>
                             <ul class="dropdown-menu">
-                              {% if username=='kordless' %}
+                              {% if admin %}
                                 <li><a target="_blank" href="{{ admin_interface_url }}">Admin Dashboard</a></li>
                               {% endif %}
                                 <li><a href="{{uri_for('blog-menu', menu_id='newarticle') }}">{% trans %}Create a New Article{% endtrans %}</a></li>

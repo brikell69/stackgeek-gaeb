@@ -197,7 +197,10 @@ class BaseHandler(webapp2.RequestHandler):
         if self.user:
             try:
                 user_info = models.User.get_by_id(long(self.user_id))
-                return user_info.admin
+                if user_info.username == config.admin_username:
+                    return True
+                else:
+                    return False
             except AttributeError, e:
                 logging.error(e)
         return False

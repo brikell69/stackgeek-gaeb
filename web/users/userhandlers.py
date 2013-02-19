@@ -187,7 +187,8 @@ class CallbackSocialLoginHandler(BaseHandler):
             oauth_verifier = self.request.get('oauth_verifier')
             twitter_helper = twitter.TwitterAuth(self)
             user_data = twitter_helper.auth_complete(oauth_token, oauth_verifier)
-            logging.info(user_data)
+            screen_name = user_data['screen_name']
+
             if self.user:
                 # user is already logged in so we set a new association with twitter
                 user_info = models.User.get_by_id(long(self.user_id))
@@ -196,7 +197,8 @@ class CallbackSocialLoginHandler(BaseHandler):
                         user = user_info.key,
                         provider = 'twitter',
                         uid = str(user_data['id']),
-                        extra_data = user_data
+                        extra_data = user_data,
+                        screen_name = screen_name,
                     )
                     social_user.put()
 

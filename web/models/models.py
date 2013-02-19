@@ -84,7 +84,8 @@ class SocialUser(ndb.Model):
     uid = ndb.StringProperty()
     access_token = ndb.StringProperty()
     extra_data = ndb.JsonProperty()
-
+    screen_name = ndb.StringProperty()
+    
     @classmethod
     def get_by_user(cls, user):
         return cls.query(cls.user == user).fetch()

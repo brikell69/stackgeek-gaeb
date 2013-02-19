@@ -19,7 +19,7 @@
   <div class="row blog">
     {% if is_mobile %}
     <div class="span3">
-      <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{entry.twitter_username}}" data-widget-id="{{twitter_widget_id}}">Tweetss by @{{entry.twitter_username}}</a>
+      <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{twitter_username}}" data-widget-id="{{twitter_widget_id}}"></a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     </div>
     {% endif %}
@@ -43,7 +43,7 @@
     {% if not is_mobile %}
     <div class="span3">
       <div class="twitter_block">
-        <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{entry.twitter_username}}" data-widget-id="{{twitter_widget_id}}">Tweets by @{{entry.twitter_username}}</a>
+        <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{twitter_username}}" data-widget-id="{{twitter_widget_id}}"></a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
       <div class="ad_block">

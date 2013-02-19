@@ -196,10 +196,14 @@ class PublicBlogRSSHandler(BaseHandler):
 
 
 class BlogArticleSlugHandler(BaseHandler):
-    def get(self, username='kordless', article_type='guides', slug = None):
-        # look up our article
+    # default to admin if you can't find article
+    def get(self, username=config.admin_username, article_type='guides', slug = None):
+
+        # look up our owner
         user = models.User.get_by_username(username)
-        
+        twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
+
+        # look up the article
         try:
             article = models.Article.get_by_user_and_slug(user.key, slug)
             if not article:
@@ -250,11 +254,13 @@ class BlogArticleSlugHandler(BaseHandler):
                 'article_type': article.article_type,
                 'article_owner': owner_info.username,
                 'article_host': self.request.host,
+                #'twitter_username': twitter_username,
             }
             # pack and stuff into template - duplicate on article_type TODO
             params = {
                 'name': name,
-                'github_username': github_username, 
+                'github_username': github_username,
+                'twitter_username': twitter_user.screen_name,
                 'twitter_widget_id': owner_info.twitter_widget_id, 
                 'article_type': article_type,
                 'menu_choice': menu_choice, 
@@ -284,8 +290,7 @@ class BlogUserHandler(BaseHandler):
 
         # find the browsed user's github username (used for follow button)
         owner_social_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'github')
-        owner_twitter_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'twitter')
-        logging.info(owner_twitter_user)
+        twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
 
         # load github usernames
         try:
@@ -353,7 +358,7 @@ class BlogUserHandler(BaseHandler):
             'owner_github_username': owner_github_username,
             'google_plus_profile': owner_info.google_plus_profile,
             'gravatar_url': gravatar_url,
-            'twitter_username': 'kordless',
+            'twitter_username': twitter_user.screen_name,
             'twitter_widget_id': owner_info.twitter_widget_id, 
             'blogposts': blogposts, 
             'guides': guides,

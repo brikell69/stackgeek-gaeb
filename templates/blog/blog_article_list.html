@@ -56,9 +56,12 @@
 	  			<td><a href="/blog/{{ username }}/{{ item.article_type }}/{{item.slug}}">{{item.title}}</a></td>
 	  			<td>{{item.summary}}</td>
           <td>
-            <a id="edit-{{item.gist_id}}" class="btn btn-small" title="edit" href="#"><i class="icon-edit"></i></a>
-            <a id="refresh-{{item.key.id()}}" class="btn btn-small" title="clear memcache copy" href="#"><i class="icon-refresh"></i></a>
-            <a id="remove-{{item.key.id()}}" class="btn btn-small" title="remove" href="#"><i class="icon-remove"></i></a>
+            <a id="edit-{{item.gist_id}}" class="btn btn-inverse btn-small" title="edit" href="#"><i class="icon-edit icon-white"></i></a>
+            <a id="refresh-{{item.key.id()}}" class="btn btn-inverse btn-small" title="clear memcache copy" href="#"><i class="icon-refresh icon-white"></i></a>
+            <!--
+            <a title="Download to edit and view locally." href="#" id="download-button" class="btn btn-info btn-small"><i class="icon-download icon-white"></i></a>
+            -->
+            <a id="remove-{{item.key.id()}}" class="btn btn-danger btn-small" title="remove" href="#"><i class="icon-remove icon-white"></i></a>
           </td>
           <td>
             <div class="iphone"><div id="article-{{item.key.id()}}" class="toggle{% if item.draft %} draft{% endif %}"></div></div>
@@ -121,7 +124,12 @@
             });
           })
         });
-        
+
+        // download button
+        $('#download-button').click(function() {
+          $('#download').modal();
+        });
+
         // refresh memcache of article buttons
         $('a[id^="refresh-"]').each(function(index){
           $('#'+this.id).click(function() {
