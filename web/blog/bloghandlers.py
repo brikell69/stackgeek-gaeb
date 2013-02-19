@@ -203,6 +203,13 @@ class BlogArticleSlugHandler(BaseHandler):
         user = models.User.get_by_username(username)
         twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
 
+        if twitter_user:
+            twitter_username = twitter_user.screen_name
+            twitter_widget_id = owner_info.twitter_widget_id
+        else:
+            twitter_username = config.app_twitter_username
+            twitter_widget_id = config.app_twitter_widget_id
+
         # look up the article
         try:
             article = models.Article.get_by_user_and_slug(user.key, slug)
@@ -260,8 +267,8 @@ class BlogArticleSlugHandler(BaseHandler):
             params = {
                 'name': name,
                 'github_username': github_username,
-                'twitter_username': twitter_user.screen_name,
-                'twitter_widget_id': owner_info.twitter_widget_id, 
+                'twitter_username': twitter_username,
+                'twitter_widget_id': twitter_widget_id, 
                 'article_type': article_type,
                 'menu_choice': menu_choice, 
                 'entry': entry,
