@@ -14,7 +14,7 @@
 #
 
 __author__ = 'Kord Campbell'
-__website__ = 'http://www.tinyprobe.com'
+__website__ = 'http://www.stackgeek.com'
 
 import os,sys, logging
 
