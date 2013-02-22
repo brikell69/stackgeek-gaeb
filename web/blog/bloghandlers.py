@@ -201,14 +201,6 @@ class BlogArticleSlugHandler(BaseHandler):
 
         # look up our owner
         user = models.User.get_by_username(username)
-        twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
-
-        if twitter_user:
-            twitter_username = twitter_user.screen_name
-            twitter_widget_id = owner_info.twitter_widget_id
-        else:
-            twitter_username = config.app_twitter_username
-            twitter_widget_id = config.app_twitter_widget_id
 
         # look up the article
         try:
@@ -222,8 +214,17 @@ class BlogArticleSlugHandler(BaseHandler):
 
         # if there's content on Github to serve
         if gist_content:
+            twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
             owner_info = models.User.get_by_id(article.owner.id())
             
+            # twitter widget stuff
+            if twitter_user:
+                twitter_username = twitter_user.screen_name
+                twitter_widget_id = owner_info.twitter_widget_id
+            else:
+                twitter_username = config.app_twitter_username
+                twitter_widget_id = config.app_twitter_widget_id
+
             # set nav menu pill
             if 'guide' in article_type:
                 menu_choice = 'guides'
@@ -297,7 +298,7 @@ class BlogUserHandler(BaseHandler):
 
         # find the browsed user's github username (used for follow button)
         owner_social_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'github')
-        twitter_user = models.SocialUser.get_by_user_and_provider(user.key, 'twitter')
+        twitter_user = models.SocialUser.get_by_user_and_provider(owner_info.key, 'twitter')
 
         # load github usernames
         try:
