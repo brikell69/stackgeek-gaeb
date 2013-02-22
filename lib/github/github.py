@@ -134,7 +134,7 @@ def get_gist_content(gist_id):
         return content
     else:
         logging.info("cache miss for %s" % gist_id)
-        Try:
+        try:
             # go fetch the gist using the gist_id
             http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
             headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
