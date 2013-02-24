@@ -89,7 +89,7 @@ class GithubAuth(object):
 
 def get_user_gists(github_user, access_token):
     params = {'access_token': access_token}
-    base_uri = 'https://api.github.com/users/%s/gists' % github_user
+    base_uri = 'https://api.github.com/users/%s/gists?client_id=%s&client_secret=%s' % (github_user, config.github_client_id, config.github_client_secret) 
     uri = '%s?%s' % (base_uri, urllib.urlencode(params))
     
     try:
@@ -133,11 +133,11 @@ def get_gist_content(gist_id):
     if content is not None:
         return content
     else:
-        logging.info("cache miss for %s" % gist_id)
+        logging.info("Got a cache miss for %s." % gist_id)
         try:
             # go fetch the gist using the gist_id
             http = httplib2.Http(cache=None, timeout=10, proxy_info=None)
-            headers, content = http.request('https://api.github.com/gists/%s' % gist_id, method='GET', body=None, headers=None)
+            headers, content = http.request('https://api.github.com/gists/%s?client_id=%s&client_secret=%s' % (gist_id, config.github_client_id, config.github_client_secret), method='GET', body=None, headers=None)
             
             if headers['status'] == '404':
                 logging.info("looked for gist ID %s but didn't find it.  404 bitches.")
@@ -146,6 +146,7 @@ def get_gist_content(gist_id):
             # strip bad UTF-8 stuff if it exists (like in a gist with a .png)
             content = content.decode('utf-8', 'replace')
             gist = simplejson.loads(content)
+
 
             # see if we have .md or .rst file matching our filenames in config
             if config.gist_markdown_name in gist['files']:

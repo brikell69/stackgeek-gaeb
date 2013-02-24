@@ -84,7 +84,8 @@ _routes = [
     # channel watcher
     RedirectRoute('/_ah/channel/connected/', handlers.channelHandler, name='channel-connected', strict_slash=True),
     RedirectRoute('/_ah/channel/disconnected/', handlers.channelHandler, name='channel-disconnected', strict_slash=True),
-    RedirectRoute('/_ah/channel/dev', handlers.channelHandler, name='channel-dev', strict_slash=True), 
+    RedirectRoute('/_ah/channel/dev', handlers.channelHandler, name='channel-dev', strict_slash=True),
+    RedirectRoute('/_ah/warmup', handlers.warmupHandler, name='channel-dev', strict_slash=True),
 ]
 
 def get_routes():

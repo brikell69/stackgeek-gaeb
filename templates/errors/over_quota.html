@@ -1,24 +1,7 @@
-{% extends base_layout %}
-
-<!-- Set Title -->
-{% block title %}
-  {% trans %}Over Quota{% endtrans %}
-{% endblock %}
-
-{% block extra_nav %}
-  {{ macros.nav_menu('') }}
-{% endblock %}
-
-{% block header_title_lead %}
-    <h1>That's an over quota error there partner.</h1>
-{% endblock %}
-
-{% block content %}
+<h1>That's an over quota error there partner.</h1>
     <div id="content" class="container xled">
         <p class="lead">
             Something has gone slightly or horribly wrong.  Slathering noises ensue.  If you think it's serious, use the <a href="/contact">contact</a> form to holler at me and I'll take a look.  Otherwise, head on <a href="/">back home</a> and enjoy your stay!</p>
         <p class="lead">Cheers,</p>
         <p class="lead">Kord Campbell</a>
     </div>
-
-{% endblock %}

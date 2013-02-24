@@ -156,9 +156,14 @@ class ContactHandler(BaseHandler):
 
 class channelHandler(BaseHandler):
     def get(self):
-        logging.info("some channel thang")
+        client_id = self.request.get('from')
+        logging.info("Handling channel request from %s." % client_id)
         return
 
+class warmupHandler(BaseHandler):
+    def get(self):
+        logging.info("Handling a warmup request.")
+        return
 
 class HomeRequestHandler(BaseHandler):
     def get(self, username=None):
