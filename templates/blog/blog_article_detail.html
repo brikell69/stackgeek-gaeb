@@ -46,11 +46,13 @@
         <a class="twitter-timeline" data-dnt=true href="https://twitter.com/{{twitter_username}}" data-widget-id="{{twitter_widget_id}}"></a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
-      <div class="ad_block">
-        {{ macros.google_ads('square') }}
-      </div>
-      <div class="ad_block">
-        {{ macros.google_ads('skyscraper')}}
+      <div style="position: absolute;" class="ad_wrapper">
+        <div class="ad_block">
+          {{ macros.google_ads('square') }}
+        </div>
+        <div class="ad_block">
+          {{ macros.google_ads('skyscraper')}}
+        </div>
       </div>
     </div>
     {% endif %}
@@ -58,12 +60,13 @@
 {% endblock %}
 
 {% block mediaJS %}
-    <!-- gotta pay for appengine instances! -->
+    <!-- gotta pay for appengine instances! 
     <script type="text/javascript">
       var infolinks_pid = 1454967;
       var infolinks_wsid = 0;
     </script>
     <script type="text/javascript" src="http://resources.infolinks.com/js/infolinks_main.js"></script>
+    -->
     <script type="text/javascript" language="JavaScript">
     $(window).load(function(){
       var disqus_shortname = 'stackgeek';
@@ -74,5 +77,22 @@
           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
       })();
     });
+    function scrolly () {
+      var top = 0;
+      var top_offset = 54;
+      var top_min = 700;
+      var ease = 1000;
+      if (parseInt(window.scrollY+top_offset) > top_min) {
+        top = parseInt(window.scrollY+top_offset);
+      } else {
+        top = top_min;
+      }
+      $(".ad_wrapper").animate({top: top}, {duration: ease});
+    }
+    var scroll_timer = 120000;
+    var scroll_refresh = 2000;
+    setTimeout(function() {
+      setInterval(function() { scrolly() }, scroll_refresh);
+    }, scroll_timer);
     </script>
 {% endblock %}
